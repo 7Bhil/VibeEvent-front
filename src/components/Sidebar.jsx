@@ -16,10 +16,9 @@ import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { ShieldAlert } from 'lucide-react';
 
-const Sidebar = () => {
+const Sidebar = ({ user }) => {
     const navigate = useNavigate();
     const location = useLocation();
-    const user = JSON.parse(localStorage.getItem('user') || '{}');
 
     const publicMenuItems = [
         { icon: Eye, label: 'Explorer', path: '/explore' },
@@ -31,6 +30,7 @@ const Sidebar = () => {
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
         { icon: Scan, label: 'Scanner', path: '/dashboard/scanner' },
         { icon: Calendar, label: 'Événements', path: '/dashboard/events' },
+        { icon: Vote, label: 'Sondages', path: '/dashboard/voting' },
         { icon: BarChart3, label: 'Analyses', path: '/dashboard/analytics' },
         { icon: Users, label: 'Participants', path: '/dashboard/attendees' },
         { icon: Settings, label: 'Paramètres', path: '/dashboard/settings' },

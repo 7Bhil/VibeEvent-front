@@ -41,17 +41,30 @@ const AdminDashboard = () => {
     }, []);
 
     const handleAction = async (requestId, action) => {
+        let durationDays = null;
+        if (action === 'approve') {
+            const days = window.prompt("Durée de l'accès Organisateur en jours (laisser vide pour permanent) :", "30");
+            if (days === null) return; // Cancelled
+            durationDays = days;
+        }
+
         try {
             const token = localStorage.getItem('token');
-            await fetch('http://localhost:5000/api/auth/handle-upgrade', {
+            const response = await fetch('http://localhost:5000/api/auth/handle-upgrade', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` 
                 },
-                body: JSON.stringify({ requestId, action })
+                body: JSON.stringify({ requestId, action, durationDays })
             });
-            fetchData(); // Refresh everything
+            
+            if (response.ok) {
+                fetchData(); // Refresh everything
+            } else {
+                const data = await response.json();
+                alert(data.message);
+            }
         } catch (err) {
             console.error(err);
         }

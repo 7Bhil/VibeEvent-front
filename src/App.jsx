@@ -11,11 +11,11 @@ import Profile from './pages/Profile';
 import CreateEvent from './pages/CreateEvent';
 import TicketWallet from './pages/TicketWallet';
 import EventScanner from './pages/EventScanner';
+import EventsManagement from './pages/EventsManagement';
+import Analytics from './pages/Analytics';
+import AttendeeList from './pages/AttendeeList';
+import PollManager from './pages/PollManager';
 import './App.css';
-
-
-
-
 
 function App() {
   return (
@@ -37,13 +37,11 @@ function App() {
         <Route path="/dashboard/events/create" element={<CreateEvent />} />
         <Route path="/dashboard/scanner" element={<EventScanner />} />
 
-
-
-
-        <Route path="/dashboard/events" element={<Placeholder title="Gestion des Événements" />} />
-        <Route path="/dashboard/analytics" element={<Placeholder title="Analyses & Statistiques" />} />
-        <Route path="/dashboard/attendees" element={<Placeholder title="Liste des Participants" />} />
-        <Route path="/dashboard/settings" element={<Placeholder title="Paramètres" />} />
+        <Route path="/dashboard/events" element={<EventsManagement />} />
+        <Route path="/dashboard/analytics" element={<Analytics />} />
+        <Route path="/dashboard/attendees" element={<AttendeeList />} />
+        <Route path="/dashboard/voting" element={<PollManager />} />
+        <Route path="/dashboard/settings" element={<Profile />} />
       </Route>
 
       <Route path="/" element={<Navigate to="/auth" replace />} />

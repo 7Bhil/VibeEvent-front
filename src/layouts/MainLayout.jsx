@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
@@ -6,12 +6,50 @@ import { Search, Bell } from 'lucide-react';
 
 const MainLayout = () => {
     const navigate = useNavigate();
-    const user = JSON.parse(localStorage.getItem('user') || '{"name": "Guest"}');
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{"name": "Guest"}'));
+
+    useEffect(() => {
+        const syncUser = async () => {
+            try {
+                const token = localStorage.getItem('token');
+                if (!token) return;
+
+                const response = await fetch('http://localhost:5000/api/auth/me', {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                });
+
+                if (response.ok) {
+                    const latestUser = await response.json();
+                    const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+                    // If role changed (e.g. expired), update local storage and state
+                    if (latestUser.role !== storedUser.role) {
+                        const updatedUser = { ...storedUser, role: latestUser.role };
+                        localStorage.setItem('user', JSON.stringify(updatedUser));
+                        setUser(updatedUser);
+
+                        // If on a restricted route, redirect
+                        if (latestUser.role === 'attendee' && (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/admin'))) {
+                            navigate('/explore');
+                        }
+                    }
+                } else if (response.status === 401) {
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('user');
+                    navigate('/auth');
+                }
+            } catch (err) {
+                console.error("Sync error:", err);
+            }
+        };
+
+        syncUser();
+    }, [navigate]);
 
 
     return (
         <div className="min-h-screen bg-[#030712] text-white font-['Inter'] selection:bg-blue-500/30 flex">
-            <Sidebar />
+            <Sidebar user={user} />
             
             <div className="pl-72 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
                 <header className="h-20 border-b border-white/5 flex items-center justify-between px-10 sticky top-0 bg-[#030712]/80 backdrop-blur-xl z-20 w-full">

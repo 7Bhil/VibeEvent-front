@@ -1,187 +1,205 @@
 import React, { useState, useEffect } from 'react';
-import { Trophy, Flame, TrendingUp, Music, Star, Loader2 } from 'lucide-react';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
+import { Vote, Users, TrendingUp, CheckCircle2, Loader2, Sparkles, AlertCircle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
 const Voting = () => {
     const navigate = useNavigate();
-    const [events, setEvents] = useState([]);
+    const [polls, setPolls] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [myTickets, setMyTickets] = useState([]);
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-    // Couleur spécifique pour les 3 premiers
-    const colors = ['#f59e0b', '#94a3b8', '#b45309', '#3b82f6', '#8b5cf6'];
-
-    useEffect(() => {
-        const fetchEvents = async () => {
-            try {
-                const response = await fetch('http://localhost:5000/api/events');
-                if (response.ok) {
-                    const data = await response.json();
-                    
-                    // Calculer le nombre de votes et trier
-                    const sorted = data.map(ev => ({
-                        ...ev,
-                        votes: ev.hypeUsers ? ev.hypeUsers.length : 0,
-                    })).sort((a, b) => b.votes - a.votes);
-
-                    setEvents(sorted);
-                }
-            } catch (err) {
-                console.error(err);
-            } finally {
-                setLoading(false);
-            }
-        };
-        fetchEvents();
-    }, []);
-
-    const handleHype = async (e, eventId) => {
-        e.stopPropagation();
+    const fetchData = async () => {
+        setLoading(true);
         try {
             const token = localStorage.getItem('token');
             if(!token) {
                 navigate('/auth');
                 return;
             }
-            const response = await fetch(`http://localhost:5000/api/events/${eventId}/hype`, {
-                method: 'POST',
+
+            // 1. Fetch user's tickets to know which events they can vote for
+            const ticketRes = await fetch('http://localhost:5000/api/tickets/my-tickets', {
                 headers: { 'Authorization': `Bearer ${token}` }
             });
+            const tickets = await ticketRes.json();
+            setMyTickets(tickets);
+
+            // 2. Fetch polls for those events
+            const eventIds = [...new Set(tickets.map(t => t.event._id))];
+            
+            const pollPromises = eventIds.map(id => 
+                fetch(`http://localhost:5000/api/polls/event/${id}`, {
+                    headers: { 'Authorization': `Bearer ${token}` }
+                }).then(res => res.json())
+            );
+
+            const pollResults = await Promise.all(pollPromises);
+            setPolls(pollResults.flat());
+
+        } catch (err) {
+            console.error(err);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        fetchData();
+    }, []);
+
+    const handleVote = async (pollId, optionId) => {
+        try {
+            const token = localStorage.getItem('token');
+            const response = await fetch('http://localhost:5000/api/polls/vote', {
+                method: 'POST',
+                headers: { 
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}` 
+                },
+                body: JSON.stringify({ pollId, optionId })
+            });
+
             if (response.ok) {
-                const { hyped } = await response.json();
-                
-                setEvents(prev => {
-                    const updated = prev.map(ev => {
-                        if (ev._id === eventId) {
-                            let newHypeUsers = [...(ev.hypeUsers || [])];
-                            if (hyped) {
-                                newHypeUsers.push(currentUser.id || currentUser._id);
-                            } else {
-                                newHypeUsers = newHypeUsers.filter(id => id !== (currentUser.id || currentUser._id));
-                            }
-                            return { ...ev, hypeUsers: newHypeUsers, votes: newHypeUsers.length };
-                        }
-                        return ev;
-                    });
-                    return updated.sort((a, b) => b.votes - a.votes);
-                });
+                fetchData(); // Refresh to see live results
+            } else {
+                const data = await response.json();
+                alert(data.message);
             }
         } catch (err) {
             console.error(err);
         }
     };
 
+    const getTotalVotes = (options) => options.reduce((acc, opt) => acc + opt.votes, 0);
+
     if (loading) {
         return (
-            <div className="w-full h-screen flex justify-center items-center">
-                <Loader2 className="animate-spin text-blue-500" size={50} />
+            <div className="flex justify-center items-center h-[calc(100vh-80px)]">
+                <Loader2 className="animate-spin text-blue-500" size={40} />
             </div>
         );
     }
 
-    const chartData = events.slice(0, 5).map((ev, index) => ({
-        name: ev.title.substring(0, 15) + '...',
-        votes: ev.votes,
-        color: colors[index] || '#334155'
-    }));
-
     return (
-        <div className="p-10 max-w-7xl mx-auto pb-20">
-            <div className="mb-12 text-center">
-                <div className="w-16 h-16 bg-red-500/10 text-red-500 rounded-3xl mx-auto flex items-center justify-center mb-6">
-                    <Flame size={32} />
+        <div className="p-10 max-w-5xl mx-auto pb-20">
+            <div className="mb-16 text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-purple-500/10 rounded-full border border-purple-500/20 text-purple-400 text-[10px] font-black uppercase tracking-widest mb-6">
+                    <Sparkles size={14} /> Engagements en direct
                 </div>
-                <h1 className="text-5xl font-black tracking-tighter mb-4">Vibe Charts</h1>
-                <p className="text-slate-500 font-medium text-lg max-w-xl mx-auto">Votez pour les événements que vous attendez le plus. Les événements en tête attirent plus de sponsors et de surprises.</p>
+                <h1 className="text-6xl font-black tracking-tighter mb-4">Vibez & Vote</h1>
+                <p className="text-slate-500 font-medium max-w-xl mx-auto">
+                    {polls.length > 0 
+                        ? "Participez aux décisions des événements dont vous détenez un billet." 
+                        : "Vous n'avez aucun sondage actif pour vos événements en cours."}
+                </p>
             </div>
 
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                {/* Podium Chart */}
-                <div className="lg:col-span-2 bg-[#161b2c] border border-white/5 rounded-[40px] p-8 shadow-2xl relative overflow-hidden">
-                    <div className="absolute top-0 right-0 w-64 h-64 bg-red-500/5 rounded-full blur-[80px]"></div>
-                    <div className="flex justify-between items-start mb-10 relative z-10">
-                        <div>
-                            <h2 className="text-2xl font-black flex items-center gap-2 tracking-tight">
-                                <TrendingUp className="text-red-500" />
-                                Top 5 Global
-                            </h2>
-                            <p className="text-slate-500 mt-1">En temps réel</p>
-                        </div>
-                    </div>
-
-                    <div className="h-80 w-full relative z-10">
-                        {chartData.length > 0 && chartData.some(d => d.votes > 0) ? (
-                            <ResponsiveContainer width="100%" height="100%">
-                                <BarChart data={chartData} margin={{ top: 20, right: 30, left: -20, bottom: 5 }} barSize={60}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
-                                    <XAxis dataKey="name" stroke="#64748b" tickLine={false} axisLine={false} tick={{ fontSize: 11, fontWeight: 'bold' }} />
-                                    <YAxis stroke="#64748b" tickLine={false} axisLine={false} />
-                                    <Tooltip 
-                                        cursor={{ fill: 'rgba(255,255,255,0.05)' }}
-                                        contentStyle={{ backgroundColor: '#0f172a', border: 'none', borderRadius: '12px' }}
-                                    />
-                                    <Bar dataKey="votes" radius={[12, 12, 0, 0]}>
-                                        {chartData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} />
-                                        ))}
-                                    </Bar>
-                                </BarChart>
-                            </ResponsiveContainer>
-                        ) : (
-                            <div className="w-full h-full flex items-center justify-center text-slate-500 font-bold uppercase tracking-widest text-xs">
-                                Aucun vote pour le moment
-                            </div>
-                        )}
-                    </div>
+            {polls.length === 0 ? (
+                <div className="bg-white/5 border border-white/5 rounded-[48px] p-20 text-center opacity-50">
+                    <AlertCircle className="mx-auto text-slate-700 mb-6" size={48} />
+                    <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">
+                        Aucun sondage disponible. Achetez des billets pour débloquer les votes.
+                    </p>
+                    <button 
+                        onClick={() => navigate('/explore')}
+                        className="mt-8 text-blue-500 font-black text-sm hover:underline"
+                    >
+                        Explorer les événements →
+                    </button>
                 </div>
-
-                {/* Leaderboard List */}
-                <div className="bg-white/5 border border-white/5 rounded-[40px] p-8">
-                    <h2 className="text-xl font-black mb-8 flex items-center gap-2">
-                        <Trophy className="text-yellow-500" />
-                        Classement Live
-                    </h2>
-
-                    <div className="space-y-4">
-                        {events.map((event, index) => {
-                            const isHyped = (event.hypeUsers || []).includes(currentUser.id || currentUser._id);
-                            
-                            return (
-                                <div 
-                                    key={event._id}
-                                    onClick={() => navigate(`/event/${event._id}`)}
-                                    className="bg-[#030712]/50 border border-white/5 rounded-2xl p-4 flex items-center gap-4 cursor-pointer hover:border-white/20 transition-all group"
-                                >
-                                    <div className={`w-10 h-10 rounded-xl flex items-center justify-center font-black text-lg ${
-                                        index === 0 ? "bg-yellow-500/20 text-yellow-500" :
-                                        index === 1 ? "bg-slate-300/20 text-slate-300" :
-                                        index === 2 ? "bg-amber-700/20 text-amber-500" : "bg-white/5 text-slate-500"
-                                    }`}>
-                                        {index + 1}
+            ) : (
+                <div className="space-y-12">
+                    {polls.map((poll) => {
+                        const total = getTotalVotes(poll.options);
+                        const hasVoted = poll.voters.includes(currentUser.id || currentUser._id);
+                        const isClosed = poll.status === 'closed' || (poll.expiresAt && new Date() > new Date(poll.expiresAt));
+                        
+                        return (
+                            <div key={poll._id} className="bg-white/5 border border-white/5 rounded-[48px] p-12 hover:bg-white/10 transition-all duration-500 relative overflow-hidden group">
+                                <div className="absolute -right-20 -top-20 w-64 h-64 bg-blue-500/5 blur-[100px] rounded-full group-hover:bg-blue-500/10 transition-colors"></div>
+                                
+                                <div className="relative z-10">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                                        <div>
+                                            <div className="flex items-center gap-2 mb-2">
+                                                <span className="bg-blue-500/10 text-blue-400 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg border border-blue-500/20">
+                                                    #{poll._id.substring(poll._id.length-4)}
+                                                </span>
+                                                {isClosed && <span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/10">Clos</span>}
+                                            </div>
+                                            <h2 className="text-3xl font-black tracking-tighter mb-2">{poll.question}</h2>
+                                            <p className="text-slate-400 font-medium">{poll.description}</p>
+                                        </div>
+                                        <div className="flex items-center gap-4 shrink-0">
+                                            <div className="text-right">
+                                                <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Votes</p>
+                                                <p className="font-black text-xl">{total.toLocaleString()}</p>
+                                            </div>
+                                            {(poll.expiresAt || isClosed) && (
+                                                <>
+                                                    <div className="w-px h-10 bg-white/10"></div>
+                                                    <div className="text-right">
+                                                        <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Statut</p>
+                                                        <p className={`font-black text-xl ${isClosed ? 'text-red-400' : 'text-blue-400'}`}>
+                                                            {isClosed ? 'Terminé' : 'En cours'}
+                                                        </p>
+                                                    </div>
+                                                </>
+                                            )}
+                                        </div>
                                     </div>
-                                    
-                                    <div className="flex-1 overflow-hidden">
-                                        <h4 className="font-bold text-sm truncate">{event.title}</h4>
-                                        <p className="text-[10px] uppercase font-black tracking-widest text-slate-500">{event.votes} Hypes</p>
+
+                                    <div className="space-y-4">
+                                        {poll.options.map((opt) => {
+                                            const percentage = total > 0 ? Math.round((opt.votes / total) * 100) : 0;
+                                            const showResults = hasVoted || isClosed;
+
+                                            return (
+                                                <button 
+                                                    key={opt._id}
+                                                    disabled={showResults}
+                                                    onClick={() => handleVote(poll._id, opt._id)}
+                                                    className={`w-full relative group/opt overflow-hidden rounded-[24px] border transition-all ${
+                                                        showResults ? "cursor-default" : "cursor-pointer hover:border-white/20"
+                                                    } ${hasVoted ? "border-blue-500/30 bg-blue-600/5" : "border-white/5 bg-white/5"} `}
+                                                >
+                                                    {/* Percentage Bar */}
+                                                    {showResults && (
+                                                        <div 
+                                                            className={`absolute inset-y-0 left-0 bg-blue-500 opacity-20 transition-all duration-1000 ease-out`}
+                                                            style={{ width: `${percentage}%` }}
+                                                        ></div>
+                                                    )}
+
+                                                    <div className="relative z-10 p-6 flex items-center justify-between">
+                                                        <div className="flex items-center gap-4">
+                                                            <div className={`w-3 h-3 rounded-full ${showResults ? 'bg-blue-500' : 'bg-slate-500'} shadow-lg shadow-current/20`}></div>
+                                                            <span className="font-bold tracking-tight text-lg">{opt.text}</span>
+                                                        </div>
+                                                        {showResults && (
+                                                            <div className="text-right">
+                                                                <span className="font-black text-xl tracking-tighter">{percentage}%</span>
+                                                                <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{opt.votes} voix</p>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </button>
+                                            );
+                                        })}
                                     </div>
 
-                                    <button 
-                                        onClick={(e) => handleHype(e, event._id)}
-                                        className={`w-12 h-12 rounded-xl flex items-center justify-center border transition-all ${
-                                            isHyped 
-                                            ? "bg-red-500/20 border-red-500/50 text-red-500" 
-                                            : "bg-white/5 border-white/5 text-slate-500 hover:border-red-500/30 hover:text-red-400"
-                                        }`}
-                                    >
-                                        <Flame size={20} className={isHyped ? "fill-red-500" : ""} />
-                                    </button>
+                                    {!hasVoted && !isClosed && (
+                                        <div className="mt-8 flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                            <Vote size={14} className="animate-bounce" /> Cliquez sur une option pour valider votre choix
+                                        </div>
+                                    )}
                                 </div>
-                            );
-                        })}
-                    </div>
+                            </div>
+                        );
+                    })}
                 </div>
-            </div>
+            )}
         </div>
     );
 };
