@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
     Search, 
     Bell, 
@@ -12,7 +12,8 @@ import {
     Mic2,
     Palette,
     Dumbbell,
-    PartyPopper
+    PartyPopper,
+    Loader2
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -25,47 +26,35 @@ const categories = [
     { name: 'Sports', icon: Dumbbell, active: false },
 ];
 
-const events = [
-    {
-        id: '1',
-        title: 'Midnight Jazz Society',
-        price: '45€',
-        location: 'The Velvet Room, NYC',
-        time: '21:00 - 02:00',
-        date: '12 JUIN',
-        img: 'https://images.unsplash.com/photo-1514525253361-b83f85df0f5c?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-        id: '2',
-        title: 'Digital Futures 2024',
-        price: '299€',
-        location: 'Innovation Hub, SF',
-        time: '09:00 - 18:00',
-        date: '18 JUIN',
-        img: 'https://images.unsplash.com/photo-1540575861501-7ad05823c951?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-        id: '3',
-        title: 'Abstract Expression',
-        price: '85€',
-        location: 'Studio 42, Berlin',
-        time: '14:00 - 18:00',
-        date: '05 JUIL',
-        img: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80',
-    },
-    {
-        id: '4',
-        title: 'Twilight Gastronomy',
-        price: '150€',
-        location: 'Secret Garden, Paris',
-        time: '19:30 - 23:30',
-        date: '15 JUIL',
-        img: 'https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&w=600&q=80',
-    }
-];
-
 const Explore = () => {
     const navigate = useNavigate();
+    const [events, setEvents] = useState([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchEvents = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/events');
+                const data = await response.json();
+                if (response.ok) {
+                    setEvents(data);
+                }
+            } catch (err) {
+                console.error(err);
+            } finally {
+                setLoading(false);
+            }
+        };
+        fetchEvents();
+    }, []);
+
+    // Helper to extract min price
+    const getMinPrice = (tickets) => {
+        if (!tickets || tickets.length === 0) return 'Gratuit';
+        const prices = tickets.map(t => t.price);
+        const min = Math.min(...prices);
+        return min === 0 ? 'Gratuit' : `${min}€`; // TODO: Handle event.currency dynamically
+    };
 
     return (
         <div className="w-full">
@@ -132,44 +121,61 @@ const Explore = () => {
                 </div>
 
                 {/* Events Grid */}
-                <div className="px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
-                    {events.map((event) => (
-                        <div 
-                            key={event.id} 
-                            onClick={() => navigate(`/event/${event.id}`)}
-                            className="bg-white/5 border border-white/5 rounded-[40px] overflow-hidden group cursor-pointer hover:bg-white/10 hover:border-white/10 transition-all"
-                        >
-                            <div className="h-64 relative overflow-hidden">
-                                <img src={event.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={event.title} />
-                                <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent"></div>
-                                <div className="absolute top-4 left-4">
-                                    <span className="bg-black/40 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-xl border border-white/10">
-                                        {event.date}
-                                    </span>
-                                </div>
-                                <button className="absolute top-4 right-4 p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
-                                    <Heart size={18} />
-                                </button>
-                            </div>
-                            <div className="p-8">
-                                <div className="flex justify-between items-start mb-4">
-                                    <h3 className="text-xl font-black tracking-tight max-w-[150px] leading-tight">{event.title}</h3>
-                                    <span className="text-blue-400 font-black tracking-tighter text-lg">{event.price}</span>
-                                </div>
-                                <div className="space-y-2 text-slate-500">
-                                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
-                                        <MapPin size={12} className="text-blue-500" />
-                                        <span>{event.location}</span>
+                {loading ? (
+                    <div className="flex justify-center items-center py-20">
+                        <Loader2 className="animate-spin text-blue-500" size={40} />
+                    </div>
+                ) : events.length === 0 ? (
+                    <div className="px-8 lg:px-12 text-center py-20 text-slate-500 font-bold tracking-widest uppercase text-xs">
+                        Aucun événement publié pour le moment.
+                    </div>
+                ) : (
+                    <div className="px-8 lg:px-12 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-16">
+                        {events.map((event) => (
+                            <div 
+                                key={event._id} 
+                                onClick={() => navigate(`/event/${event._id}`)}
+                                className="bg-white/5 border border-white/5 rounded-[40px] overflow-hidden group cursor-pointer hover:bg-white/10 hover:border-white/10 transition-all flex flex-col"
+                            >
+                                <div className="h-64 relative overflow-hidden shrink-0">
+                                    <img src={event.image || 'https://images.unsplash.com/photo-1514525253361-b83f85df0f5c?auto=format&fit=crop&w=600&q=80'} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={event.title} />
+                                    <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent"></div>
+                                    <div className="absolute top-4 left-4">
+                                        <span className="bg-black/40 backdrop-blur-md text-white text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-xl border border-white/10">
+                                            {new Date(event.date).toLocaleDateString()}
+                                        </span>
                                     </div>
-                                    <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
-                                        <Calendar size={12} className="text-purple-500" />
-                                        <span>{event.time}</span>
+                                    <button className="absolute top-4 right-4 p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
+                                        <Heart size={18} />
+                                    </button>
+                                </div>
+                                <div className="p-8 flex-1 flex flex-col justify-between">
+                                    <div>
+                                        <div className="flex justify-between items-start mb-4">
+                                            <h3 className="text-xl font-black tracking-tight max-w-[150px] leading-tight line-clamp-2">{event.title}</h3>
+                                            <span className="text-blue-400 font-black tracking-tighter text-lg">{getMinPrice(event.tickets)}</span>
+                                        </div>
+                                        <div className="space-y-2 text-slate-500">
+                                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest flex-wrap line-clamp-1">
+                                                <MapPin size={12} className="text-blue-500 shrink-0" />
+                                                <span className="truncate">{event.location}</span>
+                                            </div>
+                                            <div className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-widest">
+                                                <Calendar size={12} className="text-purple-500 shrink-0" />
+                                                <span>{new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    
+                                    <div className="mt-6 pt-4 border-t border-white/5 flex items-center justify-between text-[10px] uppercase font-black tracking-widest">
+                                        <span className="text-slate-500">{event.organization?.name || 'VibeEvent'}</span>
+                                        <span className="text-emerald-500 bg-emerald-500/10 px-2.5 py-1 rounded-lg">En vente</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    ))}
-                </div>
+                        ))}
+                    </div>
+                )}
 
                 {/* Newsletter / Call to action */}
                 <div className="px-8 lg:px-12">
