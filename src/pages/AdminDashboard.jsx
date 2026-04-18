@@ -3,16 +3,25 @@ import { Users, ShieldCheck, Building2, UserCheck, UserX, CheckCircle, XCircle, 
 
 const AdminDashboard = () => {
     const [requests, setRequests] = useState([]);
+    const [stats, setStats] = useState({ totalUsers: 0, totalOrganizations: 0, pendingRequests: 0 });
     const [loading, setLoading] = useState(true);
 
-    const fetchRequests = async () => {
+    const fetchData = async () => {
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/auth/pending-upgrades', {
-                headers: { 'Authorization': `Bearer ${token}` }
-            });
-            const data = await response.json();
-            if (response.ok) setRequests(data);
+            const [reqRes, statsRes] = await Promise.all([
+                fetch('http://localhost:5000/api/auth/pending-upgrades', { headers: { 'Authorization': `Bearer ${token}` } }),
+                fetch('http://localhost:5000/api/admin/stats', { headers: { 'Authorization': `Bearer ${token}` } })
+            ]);
+
+            if (reqRes.ok) {
+                const data = await reqRes.json();
+                setRequests(data);
+            }
+            if (statsRes.ok) {
+                const data = await statsRes.json();
+                setStats(data);
+            }
         } catch (err) {
             console.error(err);
         } finally {
@@ -21,7 +30,7 @@ const AdminDashboard = () => {
     };
 
     useEffect(() => {
-        fetchRequests();
+        fetchData();
     }, []);
 
     const handleAction = async (requestId, action) => {
@@ -35,7 +44,7 @@ const AdminDashboard = () => {
                 },
                 body: JSON.stringify({ requestId, action })
             });
-            fetchRequests(); // Refresh
+            fetchData(); // Refresh
         } catch (err) {
             console.error(err);
         }
@@ -54,15 +63,15 @@ const AdminDashboard = () => {
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
                 <div className="bg-white/5 border border-white/5 rounded-[32px] p-8">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Utilisateurs</p>
-                    <h3 className="text-4xl font-black tracking-tighter">1,284</h3>
+                    <h3 className="text-4xl font-black tracking-tighter">{stats.totalUsers}</h3>
                 </div>
                 <div className="bg-white/5 border border-white/5 rounded-[32px] p-8">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Organisations Active</p>
-                    <h3 className="text-4xl font-black tracking-tighter">42</h3>
+                    <h3 className="text-4xl font-black tracking-tighter">{stats.totalOrganizations}</h3>
                 </div>
                 <div className="bg-white/5 border border-white/5 rounded-[32px] p-8">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Demandes en attente</p>
-                    <h3 className="text-4xl font-black tracking-tighter text-blue-400">{requests.length}</h3>
+                    <h3 className="text-4xl font-black tracking-tighter text-blue-400">{stats.pendingRequests}</h3>
                 </div>
             </div>
 

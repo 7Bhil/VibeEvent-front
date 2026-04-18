@@ -87,7 +87,7 @@ const Auth = () => {
                 <div className="relative z-10 max-w-xl">
                     <div className="mb-24 flex items-center gap-2">
                         <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-500 shadow-lg shadow-purple-500/20"></div>
-                        <h2 className="text-white font-black text-2xl tracking-tighter">LUMINESCENT</h2>
+                        <h2 className="text-white font-black text-2xl tracking-tighter">VIBEEVENT</h2>
                     </div>
 
                     <h1 className="text-white text-7xl font-black leading-[0.95] mb-8 tracking-tighter">
@@ -248,7 +248,7 @@ const Auth = () => {
                             <a href="#" className="hover:text-slate-400 transition-colors">Politique de Confidentialité</a>
                             <a href="#" className="hover:text-slate-400 transition-colors">Conditions d'Utilisation</a>
                         </div>
-                        <p className="text-[9px] text-slate-700 font-bold tracking-[0.1em] uppercase">© 2024 THE LUMINESCENT STAGE. ACCÈS SÉCURISÉ.</p>
+                        <p className="text-[9px] text-slate-700 font-bold tracking-[0.1em] uppercase">© 2024 THE VIBEEVENT STAGE. ACCÈS SÉCURISÉ.</p>
                     </div>
                 </div>
             </div>
