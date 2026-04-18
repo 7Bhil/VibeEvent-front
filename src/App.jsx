@@ -9,7 +9,10 @@ import Placeholder from './pages/Placeholder';
 import AdminDashboard from './pages/AdminDashboard';
 import Profile from './pages/Profile';
 import CreateEvent from './pages/CreateEvent';
+import TicketWallet from './pages/TicketWallet';
+import EventScanner from './pages/EventScanner';
 import './App.css';
+
 
 
 
@@ -25,13 +28,15 @@ function App() {
         <Route path="/explore" element={<Explore />} />
         <Route path="/voting" element={<Voting />} />
         <Route path="/event/:id" element={<EventDetail />} />
-        <Route path="/tickets" element={<Placeholder title="Mes Billets" />} />
+        <Route path="/tickets" element={<TicketWallet />} />
 
         {/* Organizer content */}
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/admin" element={<AdminDashboard />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/dashboard/events/create" element={<CreateEvent />} />
+        <Route path="/dashboard/scanner" element={<EventScanner />} />
+
 
 
 

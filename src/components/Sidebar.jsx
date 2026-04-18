@@ -9,7 +9,8 @@ import {
     LogOut,
     Eye,
     Vote,
-    Ticket
+    Ticket,
+    Scan
 } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
@@ -28,6 +29,7 @@ const Sidebar = () => {
 
     const organizerMenuItems = [
         { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
+        { icon: Scan, label: 'Scanner', path: '/dashboard/scanner' },
         { icon: Calendar, label: 'Événements', path: '/dashboard/events' },
         { icon: BarChart3, label: 'Analyses', path: '/dashboard/analytics' },
         { icon: Users, label: 'Participants', path: '/dashboard/attendees' },
