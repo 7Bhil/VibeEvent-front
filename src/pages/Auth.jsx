@@ -1,13 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, ShieldCheck, Mail, Lock, Globe, Apple as AppleIcon, Eye, EyeOff } from 'lucide-react';
-import { clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { cn } from '../lib/utils';
 
-function cn(...inputs) {
-  return twMerge(clsx(inputs));
-}
 
 const Auth = () => {
+    const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
     const [role, setRole] = useState('attendee');
     const [showPassword, setShowPassword] = useState(false);
@@ -44,7 +42,6 @@ const Auth = () => {
             const data = await response.json();
 
             if (!response.ok) {
-                // Traduction simple des erreurs communes
                 const errMsg = data.message === 'User already exists' ? 'Cet utilisateur existe déjà' :
                                data.message === 'Invalid email or password' ? 'Email ou mot de passe incorrect' :
                                data.message || 'Une erreur est survenue';
@@ -52,13 +49,26 @@ const Auth = () => {
             }
 
             localStorage.setItem('user', JSON.stringify(data));
-            alert(`Bienvenue ${data.name} !`);
+            localStorage.setItem('token', data.token);
+
+            
+            // Redirection basée sur le rôle
+            if (data.role === 'admin') {
+                navigate('/admin');
+            } else if (data.role === 'organizer') {
+                navigate('/dashboard');
+            } else {
+                navigate('/explore');
+            }
+
+            
         } catch (err) {
             setError(err.message);
         } finally {
             setLoading(false);
         }
     };
+
 
     return (
         <div className="min-h-screen bg-[#030712] flex flex-col lg:flex-row font-['Inter'] selection:bg-purple-500/30">
