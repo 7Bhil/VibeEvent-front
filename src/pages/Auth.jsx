@@ -7,7 +7,6 @@ import { cn } from '../lib/utils';
 const Auth = () => {
     const navigate = useNavigate();
     const [isLogin, setIsLogin] = useState(true);
-    const [role, setRole] = useState('attendee');
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         name: '',
@@ -30,7 +29,7 @@ const Auth = () => {
         const endpoint = isLogin ? '/api/auth/login' : '/api/auth/register';
         const payload = isLogin 
             ? { email: formData.email, password: formData.password }
-            : { ...formData, role };
+            : { ...formData, role: 'attendee' };
 
         try {
             const response = await fetch(`http://localhost:5000${endpoint}`, {
@@ -168,39 +167,6 @@ const Auth = () => {
                             </div>
                         )}
 
-                        {!isLogin && (
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">S'inscrire en tant que</label>
-                                <div className="grid grid-cols-2 gap-4">
-                                    <button
-                                        type="button"
-                                        onClick={() => setRole('attendee')}
-                                        className={cn(
-                                            "flex flex-col items-center justify-center p-5 rounded-2xl border transition-all duration-300 gap-3 group/role",
-                                            role === 'attendee' 
-                                                ? "bg-purple-500/10 border-purple-500/30 text-white shadow-lg shadow-purple-500/10" 
-                                                : "bg-slate-900/40 border-white/5 text-slate-500 hover:border-white/10"
-                                        )}
-                                    >
-                                        <User size={22} className={cn("transition-transform group-hover/role:scale-110", role === 'attendee' ? "text-purple-400" : "text-slate-600")} strokeWidth={2.5} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">Participant</span>
-                                    </button>
-                                    <button
-                                        type="button"
-                                        onClick={() => setRole('organizer')}
-                                        className={cn(
-                                            "flex flex-col items-center justify-center p-5 rounded-2xl border transition-all duration-300 gap-3 group/role",
-                                            role === 'organizer' 
-                                                ? "bg-blue-500/10 border-blue-500/30 text-white shadow-lg shadow-blue-500/10" 
-                                                : "bg-slate-900/40 border-white/5 text-slate-500 hover:border-white/10"
-                                        )}
-                                    >
-                                        <ShieldCheck size={22} className={cn("transition-transform group-hover/role:scale-110", role === 'organizer' ? "text-blue-400" : "text-slate-600")} strokeWidth={2.5} />
-                                        <span className="text-[10px] font-black uppercase tracking-widest">Organisateur</span>
-                                    </button>
-                                </div>
-                            </div>
-                        )}
 
                         <div className="space-y-3">
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Adresse Email</label>

@@ -48,12 +48,46 @@ const Explore = () => {
         fetchEvents();
     }, []);
 
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
     // Helper to extract min price
     const getMinPrice = (tickets) => {
         if (!tickets || tickets.length === 0) return 'Gratuit';
         const prices = tickets.map(t => t.price);
         const min = Math.min(...prices);
         return min === 0 ? 'Gratuit' : `${min}€`; // TODO: Handle event.currency dynamically
+    };
+
+    const handleHype = async (e, eventId) => {
+        e.stopPropagation(); // prevent navigating to event detail
+        try {
+            const token = localStorage.getItem('token');
+            if(!token) {
+                navigate('/auth');
+                return;
+            }
+            const response = await fetch(`http://localhost:5000/api/events/${eventId}/hype`, {
+                method: 'POST',
+                headers: { 'Authorization': `Bearer ${token}` }
+            });
+            if (response.ok) {
+                const { hyped } = await response.json();
+                setEvents(prev => prev.map(ev => {
+                    if (ev._id === eventId) {
+                        let newHypeUsers = [...(ev.hypeUsers || [])];
+                        if (hyped) {
+                            newHypeUsers.push(currentUser.id || currentUser._id);
+                        } else {
+                            newHypeUsers = newHypeUsers.filter(id => id !== (currentUser.id || currentUser._id));
+                        }
+                        return { ...ev, hypeUsers: newHypeUsers };
+                    }
+                    return ev;
+                }));
+            }
+        } catch (err) {
+            console.error(err);
+        }
     };
 
     return (
@@ -145,8 +179,15 @@ const Explore = () => {
                                             {new Date(event.date).toLocaleDateString()}
                                         </span>
                                     </div>
-                                    <button className="absolute top-4 right-4 p-2 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300">
-                                        <Heart size={18} />
+                                    <button 
+                                        onClick={(e) => handleHype(e, event._id)}
+                                        className="absolute top-4 right-4 py-1.5 px-3 bg-black/40 backdrop-blur-md rounded-xl border border-white/10 text-white opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-300 flex items-center gap-1.5 hover:bg-black/60"
+                                    >
+                                        <Heart 
+                                            size={16} 
+                                            className={(event.hypeUsers || []).includes(currentUser.id || currentUser._id) ? "fill-red-500 text-red-500" : ""}
+                                        />
+                                        {event.hypeUsers?.length > 0 && <span className="text-[10px] font-black">{event.hypeUsers.length}</span>}
                                     </button>
                                 </div>
                                 <div className="p-8 flex-1 flex flex-col justify-between">
