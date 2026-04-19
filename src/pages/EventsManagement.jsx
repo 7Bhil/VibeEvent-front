@@ -54,7 +54,7 @@ const EventsManagement = () => {
                 </div>
                 <button 
                     onClick={() => navigate('/dashboard/events/create')}
-                    className="bg-blue-600 hover:bg-blue-500 text-white font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2"
+                    className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2"
                 >
                     <Plus size={18} strokeWidth={3} /> Créer un événement
                 </button>
@@ -62,14 +62,14 @@ const EventsManagement = () => {
 
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin text-blue-500" size={40} />
+                    <Loader2 className="animate-spin text-red-500" size={40} />
                 </div>
             ) : events.length === 0 ? (
-                <div className="bg-white/5 border border-white/5 rounded-[40px] p-20 text-center">
+                <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-20 text-center">
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mb-6">Vous n'avez pas encore créé d'événement</p>
                     <button 
                         onClick={() => navigate('/dashboard/events/create')}
-                        className="text-blue-500 font-black text-sm hover:underline"
+                        className="text-red-500 font-black text-sm hover:underline"
                     >
                         Commencer maintenant →
                     </button>
@@ -77,8 +77,8 @@ const EventsManagement = () => {
             ) : (
                 <div className="grid grid-cols-1 gap-4">
                     {events.map((event) => (
-                        <div key={event._id} className="bg-white/5 border border-white/5 rounded-[32px] p-6 flex flex-col md:flex-row items-center gap-8 hover:bg-white/10 transition-all group">
-                            <div className="w-full md:w-32 h-32 rounded-2xl overflow-hidden shrink-0 border border-white/10">
+                        <div key={event._id} className="bg-slate-100 border border-slate-200 rounded-[32px] p-6 flex flex-col md:flex-row items-center gap-8 hover:bg-slate-200 transition-all group">
+                            <div className="w-full md:w-32 h-32 rounded-2xl overflow-hidden shrink-0 border border-slate-200">
                                 <img src={event.image} alt={event.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
                             </div>
                             
@@ -86,11 +86,11 @@ const EventsManagement = () => {
                                 <h3 className="text-xl font-bold mb-2 truncate">{event.title}</h3>
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-500 text-xs">
                                     <div className="flex items-center gap-1.5">
-                                        <Calendar size={14} className="text-blue-500" />
+                                        <Calendar size={14} className="text-red-500" />
                                         <span>{new Date(event.date).toLocaleDateString()}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
-                                        <MapPin size={14} className="text-purple-500" />
+                                        <MapPin size={14} className="text-red-500" />
                                         <span className="truncate max-w-[200px]">{event.location}</span>
                                     </div>
                                     <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-black uppercase tracking-widest border ${
@@ -104,13 +104,13 @@ const EventsManagement = () => {
                             <div className="flex items-center gap-2">
                                 <button 
                                     onClick={() => navigate(`/event/${event._id}`)}
-                                    className="p-4 bg-white/5 text-slate-400 rounded-2xl hover:bg-white/10 hover:text-white transition-all"
+                                    className="p-4 bg-slate-100 text-slate-500 rounded-2xl hover:bg-slate-200 hover:text-slate-900 transition-all"
                                     title="Voir l'événement"
                                 >
                                     <Eye size={18} />
                                 </button>
                                 <button 
-                                    className="p-4 bg-white/5 text-slate-400 rounded-2xl hover:bg-white/10 hover:text-white transition-all"
+                                    className="p-4 bg-slate-100 text-slate-500 rounded-2xl hover:bg-slate-200 hover:text-slate-900 transition-all"
                                     title="Modifier"
                                 >
                                     <Edit3 size={18} />

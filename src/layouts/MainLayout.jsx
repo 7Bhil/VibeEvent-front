@@ -48,30 +48,30 @@ const MainLayout = () => {
 
 
     return (
-        <div className="min-h-screen bg-[#030712] text-white font-['Inter'] selection:bg-blue-500/30 flex">
+        <div className="min-h-screen bg-slate-50 text-slate-900 font-['Inter'] selection:bg-red-500/30 flex">
             <Sidebar user={user} />
             
             <div className="pl-72 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
-                <header className="h-20 border-b border-white/5 flex items-center justify-between px-10 sticky top-0 bg-[#030712]/80 backdrop-blur-xl z-20 w-full">
+                <header className="h-20 border-b border-slate-200 flex items-center justify-between px-10 sticky top-0 bg-slate-50/80 backdrop-blur-xl z-20 w-full">
                     <div className="relative group w-96 hidden md:block">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-blue-400 transition-colors" size={18} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors" size={18} />
                         <input 
                             type="text" 
                             placeholder="Rechercher des événements ou analyses..."
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-2.5 pl-12 pr-4 outline-none focus:border-blue-500/30 focus:ring-4 focus:ring-blue-500/5 transition-all text-sm font-medium text-white"
+                            className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-2.5 pl-12 pr-4 outline-none focus:border-red-500/30 focus:ring-4 focus:ring-red-500/5 transition-all text-sm font-medium text-slate-900"
                         />
                     </div>
 
                     <div className="flex items-center gap-6 ml-auto">
                         <div className="relative">
-                            <Bell className="text-slate-500 hover:text-white transition-colors cursor-pointer" size={20} />
-                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-blue-500 rounded-full border-2 border-[#030712]"></div>
+                            <Bell className="text-slate-500 hover:text-slate-900 transition-colors cursor-pointer" size={20} />
+                            <div className="absolute -top-1 -right-1 w-2 h-2 bg-red-500 rounded-full border-2 border-[#f8fafc]"></div>
                         </div>
                         <div 
                             onClick={() => navigate('/profile')}
-                            className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-800 to-slate-700 border border-white/10 p-0.5 overflow-hidden cursor-pointer hover:scale-105 transition-transform shrink-0"
+                            className="w-10 h-10 rounded-xl bg-gradient-to-tr from-slate-200 to-slate-100 border border-slate-200 p-0.5 overflow-hidden cursor-pointer hover:scale-105 transition-transform shrink-0"
                         >
-                            <img src={`https://api.dicebear.com/7.x/avataaars/svg?seed=${user.name}`} alt="profile" className="w-full h-full object-cover" />
+                            <img src={`https://api.dicebear.com/7.x/shapes/svg?seed=${user.name}&backgroundColor=ffffff,f8fafc`} alt="profile" className="w-full h-full object-cover rounded-xl" />
                         </div>
                     </div>
 

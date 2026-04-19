@@ -43,29 +43,29 @@ const Dashboard = () => {
     if (loading) {
         return (
             <div className="w-full h-screen flex justify-center items-center">
-                <Loader2 className="animate-spin text-blue-500" size={50} />
+                <Loader2 className="animate-spin text-red-500" size={50} />
             </div>
         );
     }
 
     if (!stats) {
-        return <div className="p-10 text-white">Erreur lors du chargement des statistiques.</div>;
+        return <div className="p-10 text-slate-900">Erreur lors du chargement des statistiques.</div>;
     }
 
     const statCards = [
-        { label: 'Total Événements', value: stats.totalEvents, change: 'Créés', icon: Calendar, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+        { label: 'Total Événements', value: stats.totalEvents, change: 'Créés', icon: Calendar, color: 'text-red-600', bg: 'bg-red-500/10' },
         { label: 'Revenus', value: `${stats.totalRevenue} €`, change: 'Générés', icon: DollarSign, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-        { label: 'Billets Vendus', value: stats.ticketsSold, change: 'Ventes', icon: Users, color: 'text-blue-400', bg: 'bg-blue-500/10' },
+        { label: 'Billets Vendus', value: stats.ticketsSold, change: 'Ventes', icon: Users, color: 'text-red-600', bg: 'bg-red-500/10' },
         { label: 'Participants Actifs', value: stats.scansIn, change: 'Scannés', icon: Zap, color: 'text-yellow-400', bg: 'bg-yellow-500/10' }
     ];
 
     const CustomTooltip = ({ active, payload, label }) => {
         if (active && payload && payload.length) {
             return (
-                <div className="bg-[#161b2c] p-4 border border-white/10 rounded-xl shadow-2xl backdrop-blur-md">
-                    <p className="font-bold text-white mb-2">{label}</p>
+                <div className="bg-white p-4 border border-slate-200 rounded-xl shadow-2xl backdrop-blur-md">
+                    <p className="font-bold text-slate-900 mb-2">{label}</p>
                     <p className="text-emerald-400 text-sm font-black tracking-widest">{`Revenus : ${payload[0].value}€`}</p>
-                    <p className="text-blue-400 text-sm font-black tracking-widest mt-1">{`Participants : ${payload[0].payload.attendees}`}</p>
+                    <p className="text-red-600 text-sm font-black tracking-widest mt-1">{`Participants : ${payload[0].payload.attendees}`}</p>
                 </div>
             );
         }
@@ -83,7 +83,7 @@ const Dashboard = () => {
             {/* Stats Grid */}
             <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
                 {statCards.map((stat, i) => (
-                    <div key={i} className="bg-white/5 border border-white/5 rounded-[32px] p-8 hover:border-white/10 transition-all group relative overflow-hidden">
+                    <div key={i} className="bg-slate-100 border border-slate-200 rounded-[32px] p-8 hover:border-slate-200 transition-all group relative overflow-hidden">
                         <div className="absolute -right-4 -top-4 w-32 h-32 bg-white/2 opacity-[0.02] rounded-full group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="flex justify-between items-start mb-6">
                             <div className={`${stat.bg} ${stat.color} p-4 rounded-2xl`}>
@@ -101,7 +101,7 @@ const Dashboard = () => {
 
             {/* Charts Area */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-2 bg-white/5 border border-white/5 rounded-[32px] p-8">
+                <div className="lg:col-span-2 bg-slate-100 border border-slate-200 rounded-[32px] p-8">
                     <div className="flex justify-between items-center mb-10">
                         <div>
                             <h3 className="text-xl font-bold tracking-tight">Ventes par Événement</h3>
@@ -113,7 +113,7 @@ const Dashboard = () => {
                         {stats.chartData && stats.chartData.length > 0 ? (
                             <ResponsiveContainer width="100%" height="100%">
                                 <BarChart data={stats.chartData} margin={{ top: 10, right: 10, left: -20, bottom: 0 }}>
-                                    <CartesianGrid strokeDasharray="3 3" stroke="#1e293b" vertical={false} />
+                                    <CartesianGrid strokeDasharray="3 3" stroke="#ffffff" vertical={false} />
                                     <XAxis dataKey="name" stroke="#64748b" tick={{ fill: '#64748b', fontSize: 10, fontWeight: 'bold' }} tickLine={false} axisLine={false} />
                                     <YAxis stroke="#64748b" tick={{ fill: '#64748b', fontSize: 10, fontWeight: 'bold' }} tickLine={false} axisLine={false} />
                                     <Tooltip content={<CustomTooltip />} cursor={{ fill: 'rgba(255, 255, 255, 0.05)' }} />
@@ -129,9 +129,9 @@ const Dashboard = () => {
                 </div>
 
                 {/* Quick Access List */}
-                <div className="bg-[#161b2c] border border-white/5 rounded-[32px] p-8 flex flex-col justify-between">
+                <div className="bg-white border border-slate-200 rounded-[32px] p-8 flex flex-col justify-between">
                     <div>
-                        <div className="w-12 h-12 bg-blue-500/10 text-blue-400 rounded-2xl flex items-center justify-center mb-6">
+                        <div className="w-12 h-12 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mb-6">
                             <QrCode size={24} strokeWidth={2.5} />
                         </div>
                         <h3 className="text-xl font-bold tracking-tight mb-2">Terminal de Check-in</h3>
@@ -139,14 +139,14 @@ const Dashboard = () => {
                     </div>
                     <button 
                         onClick={() => navigate('/dashboard/scanner')}
-                        className="w-full mt-8 bg-blue-600/20 text-blue-400 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-blue-500/30 hover:bg-blue-600/30 transition-all font-bold group"
+                        className="w-full mt-8 bg-red-600/20 text-red-600 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/30 hover:bg-red-600/30 transition-all font-bold group"
                     >
                         Lancer le Scanner
                     </button>
                     
                     <button 
                         onClick={() => navigate('/dashboard/events/create')}
-                        className="w-full mt-4 bg-purple-600/20 text-purple-400 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-purple-500/30 hover:bg-purple-600/30 transition-all font-bold"
+                        className="w-full mt-4 bg-red-600/20 text-red-600 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/30 hover:bg-red-600/30 transition-all font-bold"
                     >
                         Créer un Nouvel Événement
                     </button>

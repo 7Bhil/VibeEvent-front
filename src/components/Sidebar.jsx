@@ -46,11 +46,11 @@ const Sidebar = ({ user }) => {
     };
 
     return (
-        <aside className="w-72 h-screen bg-[#030712] border-r border-white/5 flex flex-col fixed left-0 top-0 z-50 overflow-y-auto custom-scrollbar">
+        <aside className="w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col fixed left-0 top-0 z-50 overflow-y-auto custom-scrollbar">
             <div className="p-8 pb-4">
                 <div className="flex items-center gap-3 mb-10 cursor-pointer" onClick={() => navigate('/explore')}>
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-500 shadow-lg shadow-purple-500/20"></div>
-                    <h2 className="text-white font-black text-xl tracking-tighter uppercase italic">VibeEvent</h2>
+                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>
+                    <h2 className="text-slate-900 font-black text-xl tracking-tighter uppercase italic">Evenflow</h2>
 
                 </div>
 
@@ -64,8 +64,8 @@ const Sidebar = ({ user }) => {
                                 className={cn(
                                     "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
                                     location.pathname.startsWith(item.path)
-                                        ? "bg-white/5 text-purple-400" 
-                                        : "text-slate-500 hover:text-white hover:bg-white/5"
+                                        ? "bg-slate-100 text-red-600" 
+                                        : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
                                 )}
                             >
                                 <item.icon size={18} strokeWidth={location.pathname.startsWith(item.path) ? 2.5 : 2} />
@@ -77,7 +77,7 @@ const Sidebar = ({ user }) => {
                 
                 {(user.role === 'organizer' || user.role === 'admin') && (
                     <>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8"></div>
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
 
                         <div className="mb-8">
                             <div className="flex items-center justify-between px-2 mb-4">
@@ -86,7 +86,7 @@ const Sidebar = ({ user }) => {
                             
                             <button 
                                 onClick={() => navigate('/dashboard/events/create')}
-                                className="w-full bg-gradient-to-r from-blue-600 to-blue-500 hover:to-blue-400 text-white font-black py-3 rounded-xl flex items-center justify-center gap-2 shadow-2xl shadow-blue-500/20 transition-all active:scale-95 mb-6 text-[10px] uppercase tracking-[0.2em]"
+                                className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:to-red-600 text-slate-900 font-black py-3 rounded-xl flex items-center justify-center gap-2 shadow-2xl shadow-red-500/20 transition-all active:scale-95 mb-6 text-[10px] uppercase tracking-[0.2em]"
                             >
                                 <Plus size={16} strokeWidth={3} />
                                 Créer
@@ -101,8 +101,8 @@ const Sidebar = ({ user }) => {
                                         className={cn(
                                             "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
                                             location.pathname === item.path 
-                                                ? "bg-white/5 text-blue-400" 
-                                                : "text-slate-500 hover:text-white hover:bg-white/5"
+                                                ? "bg-slate-100 text-red-600" 
+                                                : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
                                         )}
                                     >
                                         <item.icon size={18} strokeWidth={location.pathname === item.path ? 2.5 : 2} />
@@ -116,7 +116,7 @@ const Sidebar = ({ user }) => {
 
                 {user.role === 'admin' && (
                     <>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent mb-8"></div>
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
 
                         <div>
                             <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4 px-2">Plateforme</p>
@@ -128,8 +128,8 @@ const Sidebar = ({ user }) => {
                                         className={cn(
                                             "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
                                             location.pathname === item.path 
-                                                ? "bg-white/5 text-emerald-400" 
-                                                : "text-slate-500 hover:text-white hover:bg-white/5"
+                                                ? "bg-slate-100 text-emerald-400" 
+                                                : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
                                         )}
                                     >
                                         <item.icon size={18} strokeWidth={location.pathname === item.path ? 2.5 : 2} />

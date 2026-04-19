@@ -56,7 +56,7 @@ const AttendeeList = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-[calc(100vh-80px)]">
-                <Loader2 className="animate-spin text-blue-500" size={40} />
+                <Loader2 className="animate-spin text-red-500" size={40} />
             </div>
         );
     }
@@ -70,14 +70,14 @@ const AttendeeList = () => {
 
             <div className="flex flex-1 gap-8 min-h-0 overflow-hidden">
                 {/* Events Column */}
-                <div className="w-80 border-r border-white/5 pr-8 space-y-4 overflow-y-auto custom-scrollbar">
+                <div className="w-80 border-r border-slate-200 pr-8 space-y-4 overflow-y-auto custom-scrollbar">
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2 mb-4">Vos Événements</p>
                     {events.map((event) => (
                         <button 
                             key={event._id}
                             onClick={() => fetchAttendees(event._id)}
                             className={`w-full p-4 rounded-2xl flex items-center justify-between group transition-all text-left ${
-                                selectedEvent === event._id ? 'bg-blue-600 shadow-xl shadow-blue-500/20 text-white' : 'bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white'
+                                selectedEvent === event._id ? 'bg-red-600 shadow-xl shadow-red-500/20 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900'
                             }`}
                         >
                             <span className="font-bold text-sm truncate pr-4">{event.title}</span>
@@ -97,9 +97,9 @@ const AttendeeList = () => {
                                     placeholder="Rechercher un participant..."
                                     value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-white/5 border border-white/10 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-blue-500/30 font-medium"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-red-500/30 font-medium"
                                 />
-                                <div className="ml-4 px-4 py-2 bg-blue-500/10 rounded-xl border border-blue-500/20 text-blue-400 text-xs font-black">
+                                <div className="ml-4 px-4 py-2 bg-red-500/10 rounded-xl border border-red-500/20 text-red-600 text-xs font-black">
                                     {filteredAttendees.length} PARTICIPANTS
                                 </div>
                             </div>
@@ -107,7 +107,7 @@ const AttendeeList = () => {
                             <div className="flex-1 overflow-y-auto custom-scrollbar">
                                 {attendeesLoading ? (
                                     <div className="flex justify-center py-20">
-                                        <Loader2 className="animate-spin text-blue-500" size={32} />
+                                        <Loader2 className="animate-spin text-red-500" size={32} />
                                     </div>
                                 ) : filteredAttendees.length === 0 ? (
                                     <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest text-[10px]">
@@ -116,15 +116,15 @@ const AttendeeList = () => {
                                 ) : (
                                     <div className="grid grid-cols-1 gap-3">
                                         {filteredAttendees.map((ticket) => (
-                                            <div key={ticket._id} className="bg-white/5 border border-white/5 rounded-3xl p-6 flex items-center justify-between hover:bg-white/10 transition-all group">
+                                            <div key={ticket._id} className="bg-slate-100 border border-slate-200 rounded-3xl p-6 flex items-center justify-between hover:bg-slate-200 transition-all group">
                                                 <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 bg-white/5 rounded-2xl flex items-center justify-center border border-white/10 group-hover:border-blue-500/30 transition-colors">
-                                                        <UserCircle size={24} className="text-slate-400" />
+                                                    <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200 group-hover:border-red-500/30 transition-colors">
+                                                        <UserCircle size={24} className="text-slate-500" />
                                                     </div>
                                                     <div>
                                                         <h4 className="font-bold text-sm">{ticket.user?.name}</h4>
                                                         <div className="flex items-center gap-3 text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold">
-                                                            <div className="flex items-center gap-1 group-hover:text-blue-400 transition-colors">
+                                                            <div className="flex items-center gap-1 group-hover:text-red-600 transition-colors">
                                                                 <Mail size={12} /> {ticket.user?.email}
                                                             </div>
                                                             <div className="flex items-center gap-1">
@@ -136,8 +136,8 @@ const AttendeeList = () => {
                                                 <div className="text-right">
                                                     <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
                                                         ticket.status === 'checked_in' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                                                        ticket.status === 'active' ? 'bg-blue-500/10 text-blue-400 border-blue-500/20' :
-                                                        'bg-white/5 text-slate-400 border-white/10'
+                                                        ticket.status === 'active' ? 'bg-red-500/10 text-red-600 border-red-500/20' :
+                                                        'bg-slate-100 text-slate-500 border-slate-200'
                                                     }`}>
                                                         {ticket.status === 'checked_in' ? 'PRÉSENT' : ticket.status === 'active' ? 'ACTIF' : 'UTILISÉ'}
                                                     </span>

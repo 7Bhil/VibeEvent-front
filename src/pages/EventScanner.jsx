@@ -62,18 +62,18 @@ const EventScanner = () => {
     return (
         <div className="p-10 max-w-4xl mx-auto">
             <div className="mb-10 text-center">
-                <Scan className="mx-auto text-blue-500 mb-4" size={48} />
+                <Scan className="mx-auto text-red-500 mb-4" size={48} />
                 <h1 className="text-4xl font-black tracking-tighter">Scanner Sécurisé</h1>
                 <p className="text-slate-500 mt-2">Déchiffrement dynamique des accès.</p>
             </div>
 
             {/* Mode Toggle */}
-            <div className="flex bg-white/5 border border-white/5 rounded-2xl p-1 mb-10 max-w-md mx-auto">
+            <div className="flex bg-slate-100 border border-slate-200 rounded-2xl p-1 mb-10 max-w-md mx-auto">
                 <button
                     onClick={() => setScanMode('in')}
                     className={cn(
                         "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                        scanMode === 'in' ? "bg-blue-600 text-white shadow-lg" : "text-slate-500 hover:text-white"
+                        scanMode === 'in' ? "bg-red-600 text-white shadow-lg" : "text-slate-500 hover:text-slate-900"
                     )}
                 >
                     <LogIn size={16} /> Entrée
@@ -82,7 +82,7 @@ const EventScanner = () => {
                     onClick={() => setScanMode('out')}
                     className={cn(
                         "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                        scanMode === 'out' ? "bg-orange-600 text-white shadow-lg" : "text-slate-500 hover:text-white"
+                        scanMode === 'out' ? "bg-orange-600 text-slate-900 shadow-lg" : "text-slate-500 hover:text-slate-900"
                     )}
                 >
                     <LogOut size={16} /> Sortie (Pass-out)
@@ -90,7 +90,7 @@ const EventScanner = () => {
             </div>
 
             {/* Scanner Area */}
-            <div className="bg-[#161b2c] border-2 border-white/10 p-4 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col items-center">
+            <div className="bg-white border-2 border-slate-200 p-4 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col items-center">
                 {/* Result Overlay */}
                 {scanResult && (
                     <div className={cn(
@@ -98,14 +98,14 @@ const EventScanner = () => {
                         scanResult.type === 'success' ? "bg-emerald-900/90 backdrop-blur-md text-emerald-400" : "bg-red-900/90 backdrop-blur-md text-red-400"
                     )}>
                         {scanResult.type === 'success' ? <CheckCircle2 size={80} className="mb-4" /> : <XCircle size={80} className="mb-4" />}
-                        <h2 className="text-3xl font-black text-white text-center mb-2 px-4">{scanResult.message}</h2>
+                        <h2 className="text-3xl font-black text-slate-900 text-center mb-2 px-4">{scanResult.message}</h2>
                         {scanResult.tier && <p className="text-xl font-bold uppercase py-2 px-6 border-2 border-current rounded-full">PASS {scanResult.tier}</p>}
                     </div>
                 )}
 
                 {scanning && !scanResult && (
                     <div className="absolute inset-0 z-10 bg-black/80 flex items-center justify-center">
-                        <Loader2 className="text-blue-500 animate-spin" size={60} />
+                        <Loader2 className="text-red-500 animate-spin" size={60} />
                     </div>
                 )}
 
@@ -129,7 +129,7 @@ const EventScanner = () => {
                     cursor: pointer !important;
                 }
                 #reader__dashboard_section_csr select {
-                    background-color: #1e293b !important;
+                    background-color: #ffffff !important;
                     color: white !important;
                     padding: 8px !important;
                     border-radius: 8px !important;

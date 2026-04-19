@@ -109,7 +109,7 @@ const CreateEvent = () => {
         <div className="p-10 max-w-5xl mx-auto">
             <div className="mb-12">
                 <div className="flex items-center gap-3 mb-4">
-                    <Sparkles className="text-blue-500" size={32} />
+                    <Sparkles className="text-red-500" size={32} />
                     <h1 className="text-4xl font-black tracking-tighter">Créer un événement</h1>
                 </div>
                 <p className="text-slate-500 font-medium text-lg italic">Configurez les accès, les tarifs et les détails.</p>
@@ -117,7 +117,7 @@ const CreateEvent = () => {
 
             <form onSubmit={handleSubmit} className="space-y-10 pb-20">
                 {/* General Info */}
-                <section className="bg-white/5 border border-white/5 rounded-[40px] p-10 space-y-8">
+                <section className="bg-slate-100 border border-slate-200 rounded-[40px] p-10 space-y-8">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1">Titre de l'événement</label>
                         <input 
@@ -127,7 +127,7 @@ const CreateEvent = () => {
                             placeholder="Ex: Soirée Cyberpunk 2077"
                             value={formData.title}
                             onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white text-xl font-bold placeholder:text-slate-700 focus:border-blue-500/30 outline-none transition-all"
+                            className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 text-slate-900 text-xl font-bold placeholder:text-slate-700 focus:border-red-500/30 outline-none transition-all"
                         />
                     </div>
 
@@ -140,14 +140,14 @@ const CreateEvent = () => {
                             placeholder="Détaillez le programme..."
                             value={formData.description}
                             onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 text-white text-sm font-medium placeholder:text-slate-700 focus:border-blue-500/30 outline-none transition-all resize-none"
+                            className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 text-slate-900 text-sm font-medium placeholder:text-slate-700 focus:border-red-500/30 outline-none transition-all resize-none"
                         ></textarea>
                     </div>
                 </section>
 
                 {/* Details Grid */}
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-white">
-                    <div className="bg-white/5 border border-white/5 rounded-[40px] p-10 space-y-8 flex flex-col justify-between">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-8 text-slate-900">
+                    <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-10 space-y-8 flex flex-col justify-between">
                         <div className="space-y-4">
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                                 <Calendar size={14} /> Date et Heure
@@ -158,7 +158,7 @@ const CreateEvent = () => {
                                 required
                                 value={formData.date}
                                 onChange={handleChange}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 focus:border-blue-500/30 outline-none"
+                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none"
                             />
                         </div>
 
@@ -170,7 +170,7 @@ const CreateEvent = () => {
                                 name="category"
                                 value={formData.category}
                                 onChange={handleChange}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 focus:border-blue-500/30 outline-none appearance-none"
+                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none appearance-none"
                             >
                                 <option value="Nightlife">Nightlife</option>
                                 <option value="Concert">Concert</option>
@@ -183,7 +183,7 @@ const CreateEvent = () => {
                     </div>
 
                     {/* Localisation */}
-                    <div className="bg-white/5 border border-white/5 rounded-[40px] p-10 space-y-8 flex flex-col justify-between">
+                    <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-10 space-y-8 flex flex-col justify-between">
                         <div className="space-y-4">
                             <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                                 <MapPin size={14} /> Adresse (Ville, Pays)
@@ -195,7 +195,7 @@ const CreateEvent = () => {
                                 placeholder="Paris, France"
                                 value={formData.location}
                                 onChange={handleChange}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 focus:border-blue-500/30 outline-none"
+                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none"
                             />
                         </div>
 
@@ -209,17 +209,17 @@ const CreateEvent = () => {
                                 placeholder="https://maps.google.com/..."
                                 value={formData.googleMapsLink}
                                 onChange={handleChange}
-                                className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 focus:border-blue-500/30 outline-none"
+                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none"
                             />
                         </div>
                     </div>
                 </div>
 
                 {/* 🎟️ TICKET MANAGEMENT 🎟️ */}
-                <section className="bg-white/5 border border-white/5 rounded-[40px] p-10">
+                <section className="bg-slate-100 border border-slate-200 rounded-[40px] p-10">
                     <div className="flex items-center justify-between mb-8">
                         <div className="flex items-center gap-3">
-                            <Ticket className="text-purple-500" size={24} />
+                            <Ticket className="text-red-500" size={24} />
                             <h2 className="text-xl font-black">Billetterie & Tarifs</h2>
                         </div>
                         <div className="flex items-center gap-3">
@@ -228,7 +228,7 @@ const CreateEvent = () => {
                                 name="currency"
                                 value={formData.currency}
                                 onChange={handleChange}
-                                className="bg-white/10 border border-white/10 rounded-xl py-2 px-4 focus:border-purple-500/50 outline-none text-sm font-bold"
+                                className="bg-slate-200 border border-slate-200 rounded-xl py-2 px-4 focus:border-red-500/50 outline-none text-sm font-bold"
                             >
                                 <option value="EUR">Euro (€)</option>
                                 <option value="USD">Dollar ($)</option>
@@ -242,7 +242,7 @@ const CreateEvent = () => {
                         {['Normal', 'VIP', 'VVIP'].map((tier) => (
                             <div key={tier} className={cn(
                                 "border rounded-2xl p-6 transition-all",
-                                formData.tickets[tier].enabled ? "bg-[#030712] border-blue-500/30 shadow-lg shadow-blue-500/5" : "bg-white/5 border-white/5 opacity-60 hover:opacity-100"
+                                formData.tickets[tier].enabled ? "bg-slate-50 border-red-500/30 shadow-lg shadow-red-500/5" : "bg-slate-100 border-slate-200 opacity-60 hover:opacity-100"
                             )}>
                                 <div className="flex flex-col md:flex-row md:items-center gap-6">
                                     {/* Enable toggle */}
@@ -252,7 +252,7 @@ const CreateEvent = () => {
                                             id={`enable-${tier}`}
                                             checked={formData.tickets[tier].enabled}
                                             onChange={(e) => handleTicketChange(tier, 'enabled', e.target.checked)}
-                                            className="w-5 h-5 accent-blue-500 cursor-pointer"
+                                            className="w-5 h-5 accent-red-500 cursor-pointer"
                                         />
                                         <label htmlFor={`enable-${tier}`} className="font-black text-lg cursor-pointer">{tier}</label>
                                     </div>
@@ -267,19 +267,19 @@ const CreateEvent = () => {
                                                     min="0"
                                                     value={formData.tickets[tier].price}
                                                     onChange={(e) => handleTicketChange(tier, 'price', e.target.value)}
-                                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 outline-none focus:border-blue-500/50"
+                                                    className="w-full bg-slate-100 border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-red-500/50"
                                                 />
                                             </div>
                                             
                                             <div>
                                                 <div className="flex justify-between items-center mb-2">
                                                     <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Quantité Max</label>
-                                                    <label className="flex items-center gap-2 text-[10px] text-slate-400 cursor-pointer">
+                                                    <label className="flex items-center gap-2 text-[10px] text-slate-500 cursor-pointer">
                                                         <input 
                                                             type="checkbox"
                                                             checked={formData.tickets[tier].unlimited}
                                                             onChange={(e) => handleTicketChange(tier, 'unlimited', e.target.checked)}
-                                                            className="accent-blue-500"
+                                                            className="accent-red-500"
                                                         /> Illimité
                                                     </label>
                                                 </div>
@@ -289,7 +289,7 @@ const CreateEvent = () => {
                                                     disabled={formData.tickets[tier].unlimited}
                                                     value={formData.tickets[tier].unlimited ? '' : formData.tickets[tier].limit}
                                                     onChange={(e) => handleTicketChange(tier, 'limit', e.target.value)}
-                                                    className="w-full bg-white/5 border border-white/10 rounded-xl py-3 px-4 outline-none focus:border-blue-500/50 disabled:opacity-30 disabled:cursor-not-allowed"
+                                                    className="w-full bg-slate-100 border border-slate-200 rounded-xl py-3 px-4 outline-none focus:border-red-500/50 disabled:opacity-30 disabled:cursor-not-allowed"
                                                     placeholder={formData.tickets[tier].unlimited ? "∞" : "Ex: 100"}
                                                     required={!formData.tickets[tier].unlimited}
                                                 />
@@ -303,7 +303,7 @@ const CreateEvent = () => {
                 </section>
 
                 {/* Media Section */}
-                <section className="bg-white/5 border border-white/5 rounded-[40px] p-10">
+                <section className="bg-slate-100 border border-slate-200 rounded-[40px] p-10">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
                             <ImageIcon size={14} /> URL de l'image de couverture
@@ -314,9 +314,9 @@ const CreateEvent = () => {
                             placeholder="https://images.unsplash.com/..."
                             value={formData.image}
                             onChange={handleChange}
-                            className="w-full bg-white/5 border border-white/5 rounded-2xl py-4 px-6 focus:border-blue-500/30 outline-none text-sm"
+                            className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none text-sm"
                         />
-                        <div className="mt-4 aspect-video rounded-3xl overflow-hidden border border-white/5 bg-black/20">
+                        <div className="mt-4 aspect-video rounded-3xl overflow-hidden border border-slate-200 bg-black/20">
                             {formData.image && <img src={formData.image} alt="Preview" className="w-full h-full object-cover opacity-60" />}
                         </div>
                     </div>
@@ -326,7 +326,7 @@ const CreateEvent = () => {
                     <button 
                         type="submit"
                         disabled={loading}
-                        className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white font-black py-6 rounded-[32px] text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-2xl shadow-blue-500/20 transition-all active:scale-[0.98]"
+                        className="w-full bg-gradient-to-r from-red-600 to-red-600 hover:from-red-500 hover:to-red-500 text-slate-900 font-black py-6 rounded-[32px] text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-2xl shadow-red-500/20 transition-all active:scale-[0.98]"
                     >
                         {loading ? <Loader2 className="animate-spin" /> : "Publier l'événement maintenant"}
                     </button>

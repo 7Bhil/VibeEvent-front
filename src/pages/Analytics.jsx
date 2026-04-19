@@ -39,15 +39,15 @@ const Analytics = () => {
     if (loading) {
         return (
             <div className="flex justify-center items-center h-[calc(100vh-80px)]">
-                <Loader2 className="animate-spin text-blue-500" size={40} />
+                <Loader2 className="animate-spin text-red-500" size={40} />
             </div>
         );
     }
 
     const statCards = [
         { label: 'Revenu Total', value: `${stats.totalRevenue}€`, icon: DollarSign, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-        { label: 'Billets Vendus', value: stats.ticketsSold, icon: Ticket, color: 'text-blue-400', bg: 'bg-blue-500/10' },
-        { label: 'Taux de Présence', value: stats.ticketsSold > 0 ? `${Math.round((stats.scansIn / stats.ticketsSold) * 100)}%` : '0%', icon: Users, color: 'text-purple-400', bg: 'bg-purple-500/10' },
+        { label: 'Billets Vendus', value: stats.ticketsSold, icon: Ticket, color: 'text-red-600', bg: 'bg-red-500/10' },
+        { label: 'Taux de Présence', value: stats.ticketsSold > 0 ? `${Math.round((stats.scansIn / stats.ticketsSold) * 100)}%` : '0%', icon: Users, color: 'text-red-600', bg: 'bg-red-500/10' },
         { label: 'Événements', value: stats.totalEvents, icon: TrendingUp, color: 'text-orange-400', bg: 'bg-orange-500/10' },
     ];
 
@@ -60,7 +60,7 @@ const Analytics = () => {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
                 {statCards.map((card, i) => (
-                    <div key={i} className="bg-white/5 border border-white/5 rounded-[32px] p-8 relative overflow-hidden group">
+                    <div key={i} className="bg-slate-100 border border-slate-200 rounded-[32px] p-8 relative overflow-hidden group">
                         <div className={`absolute -right-4 -top-4 w-24 h-24 ${card.bg} blur-3xl rounded-full transition-all group-hover:scale-150`}></div>
                         <div className={`${card.bg} ${card.color} w-12 h-12 rounded-2xl flex items-center justify-center mb-6 relative z-10`}>
                             <card.icon size={24} />
@@ -76,7 +76,7 @@ const Analytics = () => {
 
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                 {/* Sales Chart */}
-                <div className="bg-white/5 border border-white/5 rounded-[40px] p-10 h-[500px] flex flex-col">
+                <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-10 h-[500px] flex flex-col">
                     <h3 className="text-xl font-bold mb-10">Ventes par Événement</h3>
                     <div className="flex-1 w-full">
                         <ResponsiveContainer width="100%" height="100%">
@@ -99,7 +99,7 @@ const Analytics = () => {
                                     tickFormatter={(value) => `${value}€`}
                                 />
                                 <Tooltip 
-                                    contentStyle={{ backgroundColor: '#161b2c', border: '1px solid #ffffff10', borderRadius: '16px' }}
+                                    contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #ffffff10', borderRadius: '16px' }}
                                     itemStyle={{ color: '#6366f1', fontWeight: 'bold' }}
                                     cursor={{ fill: '#ffffff05' }}
                                 />
@@ -121,7 +121,7 @@ const Analytics = () => {
                 </div>
 
                 {/* Attendees Chart */}
-                <div className="bg-white/5 border border-white/5 rounded-[40px] p-10 h-[500px] flex flex-col">
+                <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-10 h-[500px] flex flex-col">
                     <h3 className="text-xl font-bold mb-10">Participation (Check-ins)</h3>
                     <div className="flex-1 w-full">
                         <ResponsiveContainer width="100%" height="100%">
@@ -149,7 +149,7 @@ const Analytics = () => {
                                     axisLine={false}
                                 />
                                 <Tooltip 
-                                    contentStyle={{ backgroundColor: '#161b2c', border: '1px solid #ffffff10', borderRadius: '16px' }}
+                                    contentStyle={{ backgroundColor: '#ffffff', border: '1px solid #ffffff10', borderRadius: '16px' }}
                                 />
                                 <Area 
                                     type="monotone" 
