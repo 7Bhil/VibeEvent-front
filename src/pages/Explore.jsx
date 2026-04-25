@@ -223,11 +223,11 @@ const Explore = () => {
                 <div className="px-8 lg:px-12">
                     <div className="bg-white border border-slate-200 rounded-[64px] p-20 flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
                         <div className="absolute -right-20 -top-20 w-80 h-80 bg-red-600/10 blur-[100px] rounded-full"></div>
-                        <div className="relative z-10 max-w-xl">
-                            <h2 className="text-5xl font-black tracking-tighter mb-6 leading-tight">Ne manquez pas <br /> la prochaine étape.</h2>
-                            <p className="text-slate-500 text-lg font-medium leading-relaxed">Inscrivez-vous pour recevoir des recommandations hebdomadaires et un accès prioritaire aux soirées les plus exclusives.</p>
+                        <div className="relative z-10 max-w-xl text-center md:text-left">
+                            <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 leading-tight">Ne manquez pas <br className="hidden md:block" /> la prochaine étape.</h2>
+                            <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed">Inscrivez-vous pour recevoir des recommandations hebdomadaires.</p>
                         </div>
-                        <div className="relative z-10 flex w-full md:w-auto gap-4">
+                        <div className="relative z-10 flex flex-col sm:flex-row w-full md:w-auto gap-4">
                             <input 
                                 type="email" 
                                 placeholder="Votre email" 

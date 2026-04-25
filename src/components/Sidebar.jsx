@@ -68,12 +68,13 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
             isOpen ? "translate-x-0" : "-translate-x-full"
         )}>
             {/* Mobile close overlay */}
-            {isOpen && (
-                <div 
-                    className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[-1] lg:hidden"
-                    onClick={() => setIsOpen(false)}
-                />
-            )}
+            <div 
+                className={cn(
+                    "fixed inset-0 bg-slate-900/40 backdrop-blur-sm z-[-1] lg:hidden transition-opacity duration-300",
+                    isOpen ? "opacity-100 pointer-events-auto" : "opacity-0 pointer-events-none"
+                )}
+                onClick={() => setIsOpen(false)}
+            />
             <div className="p-8 pb-4">
                 <div className="flex items-center gap-3 mb-10 cursor-pointer" onClick={() => navigate('/explore')}>
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>

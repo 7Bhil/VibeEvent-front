@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { ShieldCheck, Building2, UserCircle, CheckCircle, XCircle, Loader2, ListTree, MoreVertical } from 'lucide-react';
+import { ShieldCheck, Building2, UserCircle, CheckCircle, XCircle, Loader2, ListTree, MoreVertical, Calendar } from 'lucide-react';
+import Modal from '../components/Modal';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('requests'); // 'requests', 'users', 'organizations'
@@ -10,44 +11,67 @@ const AdminDashboard = () => {
     
     const [stats, setStats] = useState({ totalUsers: 0, totalOrganizations: 0, pendingRequests: 0 });
     const [loading, setLoading] = useState(true);
+    
+    // Approval Modal State
+    const [isApproveModalOpen, setIsApproveModalOpen] = useState(false);
+    const [selectedRequestId, setSelectedRequestId] = useState(null);
+    const [durationDays, setDurationDays] = useState('30');
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const fetchData = async () => {
         setLoading(true);
-        try {
-            const token = localStorage.getItem('token');
-            const headers = { 'Authorization': `Bearer ${token}` };
-            
-            const [reqRes, statsRes, usersRes, orgsRes] = await Promise.all([
-                fetch('http://localhost:5000/api/auth/pending-upgrades', { headers }),
-                fetch('http://localhost:5000/api/admin/stats', { headers }),
-                fetch('http://localhost:5000/api/admin/users', { headers }),
-                fetch('http://localhost:5000/api/admin/organizations', { headers })
-            ]);
+        const token = localStorage.getItem('token');
+        const headers = { 'Authorization': `Bearer ${token}` };
 
+        try {
+            // Fetch Requests
+            const reqRes = await fetch('http://localhost:5000/api/auth/pending-upgrades', { headers });
             if (reqRes.ok) setRequests(await reqRes.json());
+        } catch (e) { console.error("Error fetching requests", e); }
+
+        try {
+            // Fetch Stats
+            const statsRes = await fetch('http://localhost:5000/api/admin/stats', { headers });
             if (statsRes.ok) setStats(await statsRes.json());
+        } catch (e) { console.error("Error fetching stats", e); }
+
+        try {
+            // Fetch Users
+            const usersRes = await fetch('http://localhost:5000/api/admin/users', { headers });
             if (usersRes.ok) setUsers(await usersRes.json());
-            if (orgsRes.ok) setOrganizations(await orgsRes.json());
-            
-        } catch (err) {
-            console.error(err);
-        } finally {
-            setLoading(false);
-        }
+        } catch (e) { console.error("Error fetching users", e); }
+
+        try {
+            // Fetch Organizations
+            const orgsRes = await fetch('http://localhost:5000/api/admin/organizations', { headers });
+            if (orgsRes.ok) {
+                const data = await orgsRes.json();
+                console.log("Orgs data fetched:", data);
+                setOrganizations(data);
+            } else {
+                console.warn("Organizations fetch failed with status:", orgsRes.status);
+            }
+        } catch (e) { console.error("Error fetching organizations", e); }
+
+        setLoading(false);
     };
 
     useEffect(() => {
         fetchData();
     }, []);
 
-    const handleAction = async (requestId, action) => {
-        let durationDays = null;
-        if (action === 'approve') {
-            const days = window.prompt("Durée de l'accès Organisateur en jours (laisser vide pour permanent) :", "30");
-            if (days === null) return; // Cancelled
-            durationDays = days;
+    const openApproveModal = (requestId) => {
+        setSelectedRequestId(requestId);
+        setIsApproveModalOpen(true);
+    };
+
+    const handleAction = async (requestId, action, finalDuration = null) => {
+        if (action === 'approve' && !finalDuration) {
+            openApproveModal(requestId);
+            return;
         }
 
+        setIsSubmitting(true);
         try {
             const token = localStorage.getItem('token');
             const response = await fetch('http://localhost:5000/api/auth/handle-upgrade', {
@@ -56,17 +80,24 @@ const AdminDashboard = () => {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}` 
                 },
-                body: JSON.stringify({ requestId, action, durationDays })
+                body: JSON.stringify({ 
+                    requestId, 
+                    action, 
+                    durationDays: finalDuration || (action === 'approve' ? durationDays : null) 
+                })
             });
             
             if (response.ok) {
                 fetchData(); // Refresh everything
+                setIsApproveModalOpen(false);
             } else {
                 const data = await response.json();
                 alert(data.message);
             }
         } catch (err) {
             console.error(err);
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
@@ -282,8 +313,8 @@ const AdminDashboard = () => {
                         {/* TAB: ORGANIZATIONS */}
                         {activeTab === 'organizations' && (
                             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                                {organizations.length === 0 ? (
-                                    <p className="text-slate-500 col-span-full text-center">Aucune organisation trouvée.</p>
+                                {(!organizations || organizations.length === 0) ? (
+                                    <p className="text-slate-500 col-span-full text-center py-20 bg-slate-100 rounded-[32px] font-bold uppercase tracking-widest text-[10px]">Aucune organisation trouvée.</p>
                                 ) : (
                                     organizations.map((org) => (
                                         <div key={org._id} className="bg-slate-100 border border-slate-200 rounded-[32px] p-8 hover:border-slate-200 transition-all flex flex-col justify-between">
@@ -315,6 +346,35 @@ const AdminDashboard = () => {
                     </>
                 )}
             </section>
+            <Modal
+                isOpen={isApproveModalOpen}
+                onClose={() => setIsApproveModalOpen(false)}
+                title="Approuver l'Organisateur"
+                footer={(
+                    <button 
+                        onClick={() => handleAction(selectedRequestId, 'approve', durationDays)}
+                        disabled={isSubmitting}
+                        className="w-full bg-emerald-600 hover:bg-emerald-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-emerald-500/20 transition-all disabled:opacity-50"
+                    >
+                        {isSubmitting ? "Traitement..." : "Confirmer l'accès"}
+                    </button>
+                )}
+            >
+                <div className="space-y-6">
+                    <p className="text-slate-500 text-sm font-medium">Définissez la durée de validité du statut organisateur pour cet utilisateur (en jours).</p>
+                    <div className="relative">
+                        <Calendar className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400" size={18} />
+                        <input 
+                            type="number" 
+                            value={durationDays}
+                            onChange={(e) => setDurationDays(e.target.value)}
+                            placeholder="30"
+                            className="w-full bg-slate-100 border border-transparent rounded-2xl py-4 pl-12 pr-6 outline-none focus:bg-white focus:border-emerald-500/20 focus:ring-4 focus:ring-emerald-500/5 transition-all text-sm font-bold"
+                        />
+                    </div>
+                    <p className="text-[10px] text-slate-400 font-bold uppercase tracking-widest text-center">Laissez vide ou mettez 0 pour un accès permanent.</p>
+                </div>
+            </Modal>
         </div>
     );
 };

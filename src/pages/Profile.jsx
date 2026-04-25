@@ -1,37 +1,43 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { User, Mail, Shield, Building, ArrowUpCircle, CheckCircle2, AlertCircle } from 'lucide-react';
+import { User, Mail, Shield, Building, ArrowUpCircle, CheckCircle2, AlertCircle, PlusCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
+import Modal from '../components/Modal';
 
 const Profile = () => {
     const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
     const [error, setError] = useState(null);
+    const [loading, setLoading] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const [newOrgName, setNewOrgName] = useState('');
 
+    const handleCreateOrganization = async () => {
+        if (!newOrgName) return;
 
-    const handleRequestUpgrade = async () => {
         setLoading(true);
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/auth/upgrade-request', {
+            const response = await fetch('http://localhost:5000/api/organizations', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
                 },
-                body: JSON.stringify({ message: "Demande de passage au statut Organisateur." })
+                body: JSON.stringify({ name: newOrgName })
             });
 
             if (response.ok) {
-                setRequestSent(true);
+                window.location.reload(); 
             } else {
                 const data = await response.json();
-                setError(data.message || "Une erreur est survenue.");
+                setError(data.message || "Erreur lors de la création.");
             }
         } catch (err) {
-            setError("Impossible de contacter le serveur.");
+            setError("Erreur de connexion.");
         } finally {
             setLoading(false);
+            setIsModalOpen(false);
         }
     };
 
@@ -41,6 +47,11 @@ const Profile = () => {
             <div className="mb-12">
                 <h1 className="text-4xl font-black tracking-tighter mb-2">Mon Profil</h1>
                 <p className="text-slate-500 font-medium">Gérez votre identité et vos accès sur Evenflow.</p>
+                {error && (
+                    <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-600 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
+                        <AlertCircle size={14} /> {error}
+                    </div>
+                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
@@ -75,7 +86,7 @@ const Profile = () => {
                             </div>
                             <div>
                                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Email</p>
-                                <p className="text-sm font-bold text-slate-200">{user.email}</p>
+                                <p className="text-sm font-bold text-slate-900">{user.email}</p>
                             </div>
                         </div>
                         <div className="flex items-center gap-4">
@@ -84,7 +95,7 @@ const Profile = () => {
                             </div>
                             <div>
                                 <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-0.5">Statut Compte</p>
-                                <p className="text-sm font-bold text-emerald-400 flex items-center gap-1">
+                                <p className="text-sm font-bold text-emerald-600 flex items-center gap-1">
                                     Vérifié <CheckCircle2 size={12} />
                                 </p>
                             </div>
@@ -128,12 +139,67 @@ const Profile = () => {
                                         </button>
                                     </div>
                                 ) : (
-                                    <button className="bg-slate-100 text-slate-900 py-4 px-10 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-slate-200 hover:bg-slate-200 transition-all">
-                                        Créer mon organisation
+                                    <button 
+                                        onClick={() => setIsModalOpen(true)}
+                                        disabled={loading}
+                                        className="bg-slate-900 text-white py-4 px-10 rounded-2xl text-[10px] font-black uppercase tracking-widest hover:bg-slate-800 transition-all shadow-xl shadow-slate-900/10 disabled:opacity-50"
+                                    >
+                                        {loading ? "Chargement..." : "Créer mon organisation"}
                                     </button>
                                 )}
                             </div>
                         )}
+                    </section>
+                    
+                    {/* Subscription Section */}
+                    <section className="bg-white border-2 border-slate-200 rounded-[40px] p-10 relative overflow-hidden">
+                        <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 -mr-20 -mt-20 rounded-full blur-[80px]"></div>
+                        
+                        <div className="relative z-10">
+                            <div className="flex items-center justify-between mb-8">
+                                <div className="flex items-center gap-3">
+                                    <div className="w-10 h-10 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500">
+                                        <ArrowUpCircle size={24} />
+                                    </div>
+                                    <h2 className="text-2xl font-black tracking-tight">Mon Abonnement</h2>
+                                </div>
+                                <span className={cn(
+                                    "px-4 py-2 rounded-2xl text-[10px] font-black uppercase tracking-widest border",
+                                    user.plan && user.plan !== 'none' ? "bg-emerald-500/10 text-emerald-500 border-emerald-500/20" : "bg-slate-100 text-slate-400 border-slate-200"
+                                )}>
+                                    {user.plan === 'premium' ? 'Suite Complète' : user.plan === 'events_only' ? 'Événements' : user.plan === 'polls_only' ? 'Sondages' : 'Aucun'}
+                                </span>
+                            </div>
+
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 items-center bg-slate-50/50 p-8 rounded-[32px] border border-slate-200/60">
+                                <div>
+                                    <h4 className="text-lg font-black mb-2">
+                                        {user.plan === 'premium' ? 'Plan Gold Illimité' : user.plan === 'none' ? 'Pass Gratuit' : `Pack ${user.plan === 'events_only' ? 'Organisateur' : 'Community'}`}
+                                    </h4>
+                                    <p className="text-sm text-slate-500 font-medium leading-relaxed mb-4">
+                                        {user.plan === 'polls_only' ? "Vous avez accès aux sondages mais pas encore à la création d'événements." : 
+                                         user.plan === 'events_only' ? "Vous pouvez créer des événements mais n'avez pas accès aux sondages." :
+                                         user.plan === 'premium' ? "Vous avez l'accès total à toutes les fonctionnalités." :
+                                         "Passez au statut organisateur pour commencer à vendre des billets."}
+                                    </p>
+                                    {user.roleExpiresAt && (
+                                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-widest">
+                                            Expire le : {new Date(user.roleExpiresAt).toLocaleDateString()}
+                                        </p>
+                                    )}
+                                </div>
+                                <div className="flex flex-col gap-3">
+                                    <button 
+                                        onClick={() => navigate('/upgrade')}
+                                        className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 px-8 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-slate-900/20 transition-all flex items-center justify-center gap-2"
+                                    >
+                                        {user.plan && user.plan !== 'none' ? 'Changer de forfait' : 'Améliorer mon compte'}
+                                        <ArrowUpCircle size={16} />
+                                    </button>
+                                    <p className="text-[9px] text-center text-slate-400 font-bold uppercase tracking-widest">Facturation mensuelle sans engagement</p>
+                                </div>
+                            </div>
+                        </div>
                     </section>
 
                     {/* Preferences / Security Section Placeholder */}
@@ -151,6 +217,32 @@ const Profile = () => {
                     </div>
                 </div>
             </div>
+            <Modal 
+                isOpen={isModalOpen} 
+                onClose={() => setIsModalOpen(false)}
+                title="Nouvelle Organisation"
+                footer={(
+                    <button 
+                        onClick={handleCreateOrganization}
+                        disabled={loading || !newOrgName}
+                        className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-red-500/20 transition-all disabled:opacity-50"
+                    >
+                        {loading ? "Création..." : "Confirmer la création"}
+                    </button>
+                )}
+            >
+                <div className="space-y-4">
+                    <p className="text-slate-500 text-sm font-medium">Donnez un nom unique à votre structure pour commencer à organiser des événements.</p>
+                    <input 
+                        type="text" 
+                        value={newOrgName}
+                        onChange={(e) => setNewOrgName(e.target.value)}
+                        placeholder="Ex: Visionary Events"
+                        className="w-full bg-slate-100 border border-transparent rounded-2xl py-4 px-6 outline-none focus:bg-white focus:border-red-500/20 focus:ring-4 focus:ring-red-500/5 transition-all text-sm font-bold"
+                        autoFocus
+                    />
+                </div>
+            </Modal>
         </div>
     );
 };
