@@ -228,8 +228,9 @@ const EventDetail = () => {
                                                 {t.price === 0 ? 'Gratuit' : `${t.price} ${event.currency}`}
                                             </span>
                                         </div>
-                                        {t.tier === 'VVIP' && <span className="text-[8px] font-black uppercase text-red-600 tracking-[0.2em] mb-2 block">Expérience Ultime</span>}
-                                        {t.tier === 'VIP' && <span className="text-[8px] font-black uppercase text-yellow-500 tracking-[0.2em] mb-2 block">Expérience Premium</span>}
+                                        {t.tier === 'Premium' && <span className="text-[8px] font-black uppercase text-red-600 tracking-[0.2em] mb-2 block">Expérience Ultime</span>}
+                                        {t.tier === 'VIP' && <span className="text-[8px] font-black uppercase text-blue-500 tracking-[0.2em] mb-2 block">Accès Privilégié</span>}
+                                        {t.tier === 'Early Bird' && <span className="text-[8px] font-black uppercase text-emerald-500 tracking-[0.2em] mb-2 block">Vente Flash - Épuisement Rapide</span>}
                                         <p className="text-[10px] text-slate-500 font-medium leading-relaxed">
                                             Accédez à l'événement. Limité aux stocks disponibles.
                                         </p>

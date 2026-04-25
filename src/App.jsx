@@ -15,6 +15,7 @@ import EventsManagement from './pages/EventsManagement';
 import Analytics from './pages/Analytics';
 import AttendeeList from './pages/AttendeeList';
 import PollManager from './pages/PollManager';
+import Upgrade from './pages/Upgrade';
 import './App.css';
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
         <Route path="/voting" element={<Voting />} />
         <Route path="/event/:id" element={<EventDetail />} />
         <Route path="/tickets" element={<TicketWallet />} />
+        <Route path="/upgrade" element={<Upgrade />} />
 
         {/* Organizer content */}
         <Route path="/dashboard" element={<Dashboard />} />

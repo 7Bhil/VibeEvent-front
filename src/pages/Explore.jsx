@@ -13,7 +13,8 @@ import {
     Palette,
     Dumbbell,
     PartyPopper,
-    Loader2
+    Loader2,
+    Settings
 } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 
@@ -94,8 +95,8 @@ const Explore = () => {
         <div className="w-full">
             <main className="pb-20">
                 {/* Hero section */}
-                <div className="relative w-full h-[70vh] px-8 lg:px-12 pt-8 mb-16 group">
-                    <div className="w-full h-full relative rounded-[48px] overflow-hidden">
+                <div className="relative w-full h-[50vh] lg:h-[70vh] px-4 lg:px-12 pt-4 lg:pt-8 mb-8 lg:mb-16 group">
+                    <div className="w-full h-full relative rounded-[32px] lg:rounded-[48px] overflow-hidden">
                         <img 
                             src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80" 
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-70"
@@ -104,25 +105,25 @@ const Explore = () => {
                         <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-transparent to-transparent"></div>
                         <div className="absolute inset-0 bg-gradient-to-r from-[#f8fafc]/60 via-transparent to-transparent"></div>
                         
-                        <div className="absolute bottom-16 left-16 max-w-2xl">
-                            <div className="flex items-center gap-3 mb-6">
-                                <span className="bg-red-600/30 text-purple-300 text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-red-500/30 backdrop-blur-md">
+                        <div className="absolute bottom-8 lg:bottom-16 left-8 lg:left-16 right-8 lg:right-auto z-10">
+                            <div className="flex items-center gap-3 mb-4 lg:mb-6">
+                                <span className="bg-red-600/30 text-purple-300 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-red-500/30 backdrop-blur-md">
                                     Tournée exclusive
                                 </span>
-                                <span className="text-slate-500 text-[10px] font-bold uppercase tracking-widest">Arrive en Août</span>
+                                <span className="text-slate-400 text-[9px] lg:text-[10px] font-bold uppercase tracking-widest">Arrive en Août</span>
                             </div>
-                            <h1 className="text-6xl md:text-8xl font-black tracking-tighter mb-8 leading-[0.9]">
+                            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9]">
                                 Luminous <br /> Echoes 2024
                             </h1>
-                            <p className="text-slate-300 text-lg font-medium mb-10 max-w-xl leading-relaxed">
-                                Découvrez la première mondiale de l'expérience audio-visuelle la plus immersive de la décennie. Un voyage sensoriel unique.
+                            <p className="text-slate-300 text-sm lg:text-lg font-medium mb-6 lg:mb-10 max-w-xl leading-relaxed lg:block hidden">
+                                Découvrez la première mondiale de l'expérience audio-visuelle la plus immersive de la décennie.
                             </p>
-                            <div className="flex gap-4">
-                                <button className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-10 rounded-2xl text-xs uppercase tracking-[0.2em] shadow-2xl shadow-red-500/20 transition-all active:scale-95">
+                            <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
+                                <button className="bg-red-600 hover:bg-red-500 text-white font-black py-3 lg:py-4 px-6 lg:px-10 rounded-2xl text-[10px] lg:text-xs uppercase tracking-[0.2em] shadow-2xl shadow-red-500/20 transition-all active:scale-95">
                                     Réserver mon accès
                                 </button>
-                                <button className="bg-slate-100 border border-slate-200 backdrop-blur-md hover:bg-slate-200 text-slate-900 font-black py-4 px-10 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all">
-                                    Détails du tour
+                                <button className="bg-slate-100/10 backdrop-blur-md border border-white/20 hover:bg-white/20 text-white font-black py-3 lg:py-4 px-6 lg:px-10 rounded-2xl text-[10px] lg:text-xs uppercase tracking-[0.2em] transition-all">
+                                    Détails
                                 </button>
                             </div>
                         </div>
@@ -137,7 +138,7 @@ const Explore = () => {
                             <Filter size={20} />
                         </button>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide">
+                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-8 px-8 lg:mx-0 lg:px-0">
                         {categories.map((cat, i) => (
                             <button 
                                 key={i}

@@ -17,17 +17,35 @@ const CreateEvent = () => {
         googleMapsLink: '',
         category: 'Nightlife',
         currency: 'EUR',
-        image: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&q=80',
+        image: '',
         tickets: {
-            Normal: { enabled: true, price: 0, limit: '', unlimited: true },
+            Standard: { enabled: true, price: 0, limit: '', unlimited: true },
             VIP: { enabled: false, price: 0, limit: '', unlimited: true },
-            VVIP: { enabled: false, price: 0, limit: '', unlimited: true }
+            'Early Bird': { enabled: false, price: 0, limit: '', unlimited: true },
+            Premium: { enabled: false, price: 0, limit: '', unlimited: true }
         }
     });
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData(prev => ({ ...prev, [name]: value }));
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            // Check file size (optional but recommended for Base64)
+            if (file.size > 2 * 1024 * 1024) { // 2MB limit
+                alert("L'image est trop lourde (max 2MB).");
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setFormData(prev => ({ ...prev, image: reader.result }));
+            };
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleTicketChange = (tier, field, value) => {
@@ -239,7 +257,7 @@ const CreateEvent = () => {
                     </div>
 
                     <div className="space-y-4">
-                        {['Normal', 'VIP', 'VVIP'].map((tier) => (
+                        {['Standard', 'VIP', 'Early Bird', 'Premium'].map((tier) => (
                             <div key={tier} className={cn(
                                 "border rounded-2xl p-6 transition-all",
                                 formData.tickets[tier].enabled ? "bg-slate-50 border-red-500/30 shadow-lg shadow-red-500/5" : "bg-slate-100 border-slate-200 opacity-60 hover:opacity-100"
@@ -306,19 +324,41 @@ const CreateEvent = () => {
                 <section className="bg-slate-100 border border-slate-200 rounded-[40px] p-10">
                     <div className="space-y-4">
                         <label className="text-[10px] font-black text-slate-500 uppercase tracking-widest ml-1 flex items-center gap-2">
-                            <ImageIcon size={14} /> URL de l'image de couverture
+                            <ImageIcon size={14} /> Photo de couverture
                         </label>
-                        <input 
-                            name="image"
-                            type="text"
-                            placeholder="https://images.unsplash.com/..."
-                            value={formData.image}
-                            onChange={handleChange}
-                            className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 focus:border-red-500/30 outline-none text-sm"
-                        />
-                        <div className="mt-4 aspect-video rounded-3xl overflow-hidden border border-slate-200 bg-black/20">
-                            {formData.image && <img src={formData.image} alt="Preview" className="w-full h-full object-cover opacity-60" />}
+                        
+                        <div className="relative">
+                            <input 
+                                type="file"
+                                accept="image/*"
+                                onChange={handleImageChange}
+                                className="hidden"
+                                id="image-upload"
+                            />
+                            <label 
+                                htmlFor="image-upload"
+                                className="w-full bg-slate-100 border-2 border-slate-200 border-dashed rounded-3xl py-12 px-6 flex flex-col items-center justify-center cursor-pointer hover:border-red-500/50 hover:bg-slate-50 transition-all group"
+                            >
+                                <div className="w-16 h-16 rounded-2xl bg-slate-200 flex items-center justify-center mb-4 group-hover:bg-red-500/10 transition-colors">
+                                    <ImageIcon size={28} className="text-slate-400 group-hover:text-red-500" />
+                                </div>
+                                <span className="text-sm font-black text-slate-500 group-hover:text-red-500 uppercase tracking-widest">
+                                    {formData.image ? 'Changer la photo' : 'Choisir une photo locale'}
+                                </span>
+                                <p className="text-[10px] text-slate-400 mt-2 font-medium">PNG, JPG ou WEBP (Max 2MB)</p>
+                            </label>
                         </div>
+
+                        {formData.image && (
+                            <div className="mt-8 aspect-video rounded-3xl overflow-hidden border border-slate-200 bg-black shadow-2xl relative group">
+                                <img src={formData.image} alt="Preview" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+                                <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-60"></div>
+                                <div className="absolute bottom-4 left-6 text-white">
+                                    <p className="text-[10px] font-black uppercase tracking-[0.2em] mb-1">Aperçu en direct</p>
+                                    <p className="text-xs font-bold text-white/70 italic">Taille optimisée pour le stockage</p>
+                                </div>
+                            </div>
+                        )}
                     </div>
                 </section>
 

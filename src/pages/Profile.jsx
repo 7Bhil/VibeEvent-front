@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { User, Mail, Shield, Building, ArrowUpCircle, CheckCircle2, AlertCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 
 const Profile = () => {
+    const navigate = useNavigate();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const [requestSent, setRequestSent] = useState(false);
-    const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
 
@@ -113,28 +113,19 @@ const Profile = () => {
                             <div className="text-center py-10">
                                 <p className="text-slate-500 mb-6 font-medium">Vous n'appartenez à aucune organisation pour le moment.</p>
                                 {user.role === 'attendee' ? (
-                                    <div className="bg-red-500/5 border border-red-500/10 rounded-3xl p-8">
+                                    <div className="bg-red-50 border border-red-100 rounded-3xl p-8">
                                         <AlertCircle className="mx-auto text-red-600 mb-4" size={32} />
                                         <h4 className="font-bold mb-2">Devenir un créateur</h4>
                                         <p className="text-sm text-slate-500 mb-8 max-w-sm mx-auto">
-                                            Pour organiser vos propres événements et créer une organisation, vous devez d'abord obtenir le statut Organisateur.
+                                            Choisissez le forfait qui vous correspond (Événements ou Sondages) pour commencer à créer.
                                         </p>
                                         
-                                        {!requestSent ? (
-                                            <button 
-                                                onClick={handleRequestUpgrade}
-                                                className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-10 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 transition-all flex items-center gap-3 mx-auto"
-                                            >
-                                                <ArrowUpCircle size={18} /> Envoyer ma demande
-                                            </button>
-                                        ) : (
-                                            <div className="flex flex-col items-center gap-2 text-emerald-400">
-                                                <div className="flex items-center gap-2 font-black uppercase tracking-widest text-xs">
-                                                    <CheckCircle2 size={20} /> Demande envoyée
-                                                </div>
-                                                <p className="text-[10px] text-slate-500 font-bold italic">L'administrateur étudie votre demande.</p>
-                                            </div>
-                                        )}
+                                        <button 
+                                            onClick={() => navigate('/upgrade')}
+                                            className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-10 rounded-2xl text-[10px] uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 transition-all flex items-center justify-center mx-auto"
+                                        >
+                                            Voir les Forfaits
+                                        </button>
                                     </div>
                                 ) : (
                                     <button className="bg-slate-100 text-slate-900 py-4 px-10 rounded-2xl text-[10px] font-black uppercase tracking-widest border border-slate-200 hover:bg-slate-200 transition-all">

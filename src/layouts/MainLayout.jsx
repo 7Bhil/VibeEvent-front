@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate, useLocation } from 'react-router-dom';
 import Sidebar from '../components/Sidebar';
 import Footer from '../components/Footer';
-import { Search, Bell } from 'lucide-react';
+import { Search, Bell, Loader2, Menu, X } from 'lucide-react';
 
 const MainLayout = () => {
     const navigate = useNavigate();
+    const location = useLocation();
     const [user, setUser] = useState(JSON.parse(localStorage.getItem('user') || '{"name": "Guest"}'));
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         const syncUser = async () => {
@@ -22,11 +24,10 @@ const MainLayout = () => {
                     const latestUser = await response.json();
                     const storedUser = JSON.parse(localStorage.getItem('user') || '{}');
 
-                    // If role changed (e.g. expired), update local storage and state
-                    if (latestUser.role !== storedUser.role) {
-                        const updatedUser = { ...storedUser, role: latestUser.role };
-                        localStorage.setItem('user', JSON.stringify(updatedUser));
-                        setUser(updatedUser);
+                    // If role or plan changed (e.g. upgraded or expired), update local storage and state
+                    if (latestUser.role !== storedUser.role || latestUser.plan !== storedUser.plan) {
+                        localStorage.setItem('user', JSON.stringify(latestUser));
+                        setUser(latestUser);
 
                         // If on a restricted route, redirect
                         if (latestUser.role === 'attendee' && (window.location.pathname.startsWith('/dashboard') || window.location.pathname.startsWith('/admin'))) {
@@ -46,14 +47,27 @@ const MainLayout = () => {
         syncUser();
     }, [navigate]);
 
+    // Close sidebar on route change for mobile
+    useEffect(() => {
+        setIsSidebarOpen(false);
+    }, [location.pathname]);
+
 
     return (
         <div className="min-h-screen bg-slate-50 text-slate-900 font-['Inter'] selection:bg-red-500/30 flex">
-            <Sidebar user={user} />
+            <Sidebar user={user} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             
-            <div className="pl-72 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
-                <header className="h-20 border-b border-slate-200 flex items-center justify-between px-10 sticky top-0 bg-slate-50/80 backdrop-blur-xl z-20 w-full">
-                    <div className="relative group w-96 hidden md:block">
+            <div className="lg:pl-72 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
+                <header className="h-20 border-b border-slate-200 flex items-center justify-between px-6 lg:px-10 fixed lg:left-72 right-0 top-0 bg-slate-50/80 backdrop-blur-xl z-[40]">
+                    {/* Mobile Toggle */}
+                    <button 
+                        onClick={() => setIsSidebarOpen(!isSidebarOpen)}
+                        className="lg:hidden p-2.5 bg-slate-100 border border-slate-200 rounded-xl text-slate-900 mr-4"
+                    >
+                        {isSidebarOpen ? <X size={20} /> : <Menu size={20} />}
+                    </button>
+
+                    <div className="relative group w-96 hidden lg:block">
                         <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors" size={18} />
                         <input 
                             type="text" 
@@ -77,7 +91,7 @@ const MainLayout = () => {
 
                 </header>
 
-                <main className="flex-1 w-full overflow-x-hidden">
+                <main className="flex-1 w-full overflow-x-hidden pt-20">
                     <Outlet />
                 </main>
 

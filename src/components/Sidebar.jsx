@@ -4,19 +4,20 @@ import {
     Calendar, 
     BarChart3, 
     Users, 
-    Settings, 
     Plus, 
     LogOut,
     Eye,
     Vote,
     Ticket,
-    Scan
+    Scan,
+    Settings,
+    User as UserIcon
 } from 'lucide-react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { cn } from '../lib/utils';
 import { ShieldAlert } from 'lucide-react';
 
-const Sidebar = ({ user }) => {
+const Sidebar = ({ user, isOpen, setIsOpen }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -27,14 +28,30 @@ const Sidebar = ({ user }) => {
     ];
 
     const organizerMenuItems = [
-        { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard' },
-        { icon: Scan, label: 'Scanner', path: '/dashboard/scanner' },
-        { icon: Calendar, label: 'Événements', path: '/dashboard/events' },
-        { icon: Vote, label: 'Sondages', path: '/dashboard/voting' },
-        { icon: BarChart3, label: 'Analyses', path: '/dashboard/analytics' },
-        { icon: Users, label: 'Participants', path: '/dashboard/attendees' },
-        { icon: Settings, label: 'Paramètres', path: '/dashboard/settings' },
+        { icon: LayoutDashboard, label: 'Dashboard', path: '/dashboard', plan: ['events_only', 'premium'] },
+        { icon: Scan, label: 'Scanner', path: '/dashboard/scanner', plan: ['events_only', 'premium'] },
+        { icon: Calendar, label: 'Événements', path: '/dashboard/events', plan: ['events_only', 'premium'] },
+        { icon: Vote, label: 'Sondages', path: '/dashboard/voting', plan: ['polls_only', 'premium'] },
+        { icon: BarChart3, label: 'Analyses', path: '/dashboard/analytics', plan: ['events_only', 'polls_only', 'premium'] },
+        { icon: Users, label: 'Participants', path: '/dashboard/attendees', plan: ['events_only', 'premium'] },
+        { icon: UserIcon, label: 'Mon Profil', path: '/profile' },
     ];
+
+    const filteredOrganizerItems = organizerMenuItems.filter(item => {
+        if (!item.plan) return true;
+        // Admins see everything
+        if (user.role === 'admin') return true;
+        // Check if the user plan provides access to this item
+        return item.plan.includes(user.plan || 'none');
+    });
+
+    const handleCreateClick = () => {
+        if (user.plan === 'polls_only') {
+            navigate('/dashboard/voting');
+        } else {
+            navigate('/dashboard/events/create');
+        }
+    };
 
     const adminMenuItems = [
         { icon: ShieldAlert, label: 'Admin Terminal', path: '/admin' },
@@ -46,7 +63,17 @@ const Sidebar = ({ user }) => {
     };
 
     return (
-        <aside className="w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col fixed left-0 top-0 z-50 overflow-y-auto custom-scrollbar">
+        <aside className={cn(
+            "w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col fixed left-0 top-0 z-[60] overflow-y-auto custom-scrollbar transition-transform duration-300 lg:translate-x-0",
+            isOpen ? "translate-x-0" : "-translate-x-full"
+        )}>
+            {/* Mobile close overlay */}
+            {isOpen && (
+                <div 
+                    className="fixed inset-0 bg-black/20 backdrop-blur-sm z-[-1] lg:hidden"
+                    onClick={() => setIsOpen(false)}
+                />
+            )}
             <div className="p-8 pb-4">
                 <div className="flex items-center gap-3 mb-10 cursor-pointer" onClick={() => navigate('/explore')}>
                     <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>
@@ -85,7 +112,7 @@ const Sidebar = ({ user }) => {
                             </div>
                             
                             <button 
-                                onClick={() => navigate('/dashboard/events/create')}
+                                onClick={handleCreateClick}
                                 className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:to-red-600 text-slate-900 font-black py-3 rounded-xl flex items-center justify-center gap-2 shadow-2xl shadow-red-500/20 transition-all active:scale-95 mb-6 text-[10px] uppercase tracking-[0.2em]"
                             >
                                 <Plus size={16} strokeWidth={3} />
@@ -94,7 +121,7 @@ const Sidebar = ({ user }) => {
 
 
                             <nav className="space-y-1">
-                                {organizerMenuItems.map((item) => (
+                                {filteredOrganizerItems.map((item) => (
                                     <Link
                                         key={item.label}
                                         to={item.path}
