@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { ShieldCheck, Building2, UserCircle, CheckCircle, XCircle, Loader2, ListTree, MoreVertical, Calendar } from 'lucide-react';
 import Modal from '../components/Modal';
+import { useToast } from '../components/Toast';
 
 const AdminDashboard = () => {
     const [activeTab, setActiveTab] = useState('requests'); // 'requests', 'users', 'organizations'
+    const { showToast } = useToast();
     
     const [requests, setRequests] = useState([]);
     const [users, setUsers] = useState([]);
@@ -88,11 +90,12 @@ const AdminDashboard = () => {
             });
             
             if (response.ok) {
+                showToast(`Demande ${action === 'approve' ? 'approuvée' : 'rejetée'} avec succès.`, "success");
                 fetchData(); // Refresh everything
                 setIsApproveModalOpen(false);
             } else {
                 const data = await response.json();
-                alert(data.message);
+                showToast(data.message, "error");
             }
         } catch (err) {
             console.error(err);

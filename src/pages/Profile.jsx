@@ -3,11 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import { User, Mail, Shield, Building, ArrowUpCircle, CheckCircle2, AlertCircle, PlusCircle } from 'lucide-react';
 import { cn } from '../lib/utils';
 import Modal from '../components/Modal';
+import { useToast } from '../components/Toast';
 
 const Profile = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const user = JSON.parse(localStorage.getItem('user') || '{}');
-    const [error, setError] = useState(null);
     const [loading, setLoading] = useState(false);
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [newOrgName, setNewOrgName] = useState('');
@@ -28,13 +29,14 @@ const Profile = () => {
             });
 
             if (response.ok) {
+                showToast("Organisation créée avec succès !", "success");
                 window.location.reload(); 
             } else {
                 const data = await response.json();
-                setError(data.message || "Erreur lors de la création.");
+                showToast(data.message || "Erreur lors de la création.", "error");
             }
         } catch (err) {
-            setError("Erreur de connexion.");
+            showToast("Erreur de connexion.", "error");
         } finally {
             setLoading(false);
             setIsModalOpen(false);
@@ -47,11 +49,6 @@ const Profile = () => {
             <div className="mb-12">
                 <h1 className="text-4xl font-black tracking-tighter mb-2">Mon Profil</h1>
                 <p className="text-slate-500 font-medium">Gérez votre identité et vos accès sur Evenflow.</p>
-                {error && (
-                    <div className="mt-4 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl text-red-600 text-xs font-bold uppercase tracking-widest flex items-center gap-2">
-                        <AlertCircle size={14} /> {error}
-                    </div>
-                )}
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">

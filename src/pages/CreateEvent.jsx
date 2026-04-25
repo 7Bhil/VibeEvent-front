@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Calendar, MapPin, Tag, DollarSign, Users, Image as ImageIcon, Sparkles, Loader2, CheckCircle2, Ticket, Globe } from 'lucide-react';
 import { cn } from '../lib/utils';
+import { useToast } from '../components/Toast';
 
 const CreateEvent = () => {
     const navigate = useNavigate();
+    const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
     
@@ -36,7 +38,7 @@ const CreateEvent = () => {
         if (file) {
             // Check file size (optional but recommended for Base64)
             if (file.size > 2 * 1024 * 1024) { // 2MB limit
-                alert("L'image est trop lourde (max 2MB).");
+                showToast("L'image est trop lourde (max 2Mo).", "error");
                 return;
             }
 
@@ -75,7 +77,7 @@ const CreateEvent = () => {
             }));
 
         if (formattedTickets.length === 0) {
-            alert("Vous devez activer au moins un type de billet.");
+            showToast("Vous devez activer au moins un type de billet.", "error");
             setLoading(false);
             return;
         }
@@ -97,15 +99,16 @@ const CreateEvent = () => {
             });
 
             if (response.ok) {
+                showToast("Événement publié avec succès !", "success");
                 setSuccess(true);
                 setTimeout(() => navigate('/dashboard/events'), 2000);
             } else {
                 const data = await response.json();
-                alert(data.message || 'Erreur lors de la création');
+                showToast(data.message || 'Erreur lors de la création', "error");
             }
         } catch (err) {
             console.error(err);
-            alert("Erreur de connexion au serveur.");
+            showToast("Erreur de connexion au serveur.", "error");
         } finally {
             setLoading(false);
         }

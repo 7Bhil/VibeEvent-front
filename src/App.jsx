@@ -17,37 +17,40 @@ import AttendeeList from './pages/AttendeeList';
 import PollManager from './pages/PollManager';
 import Upgrade from './pages/Upgrade';
 import './App.css';
+import { ToastProvider } from './components/Toast';
 
 function App() {
   return (
-    <Routes>
-      <Route path="/auth" element={<Auth />} />
-      
-      {/* Unified Layout */}
-      <Route element={<MainLayout />}>
-        {/* Attendee content */}
-        <Route path="/explore" element={<Explore />} />
-        <Route path="/voting" element={<Voting />} />
-        <Route path="/event/:id" element={<EventDetail />} />
-        <Route path="/tickets" element={<TicketWallet />} />
-        <Route path="/upgrade" element={<Upgrade />} />
-
-        {/* Organizer content */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/admin" element={<AdminDashboard />} />
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/dashboard/events/create" element={<CreateEvent />} />
-        <Route path="/dashboard/scanner" element={<EventScanner />} />
-
-        <Route path="/dashboard/events" element={<EventsManagement />} />
-        <Route path="/dashboard/analytics" element={<Analytics />} />
-        <Route path="/dashboard/attendees" element={<AttendeeList />} />
-        <Route path="/dashboard/voting" element={<PollManager />} />
-        <Route path="/dashboard/settings" element={<Profile />} />
-      </Route>
-
-      <Route path="/" element={<Navigate to="/auth" replace />} />
-    </Routes>
+    <ToastProvider>
+      <Routes>
+        <Route path="/auth" element={<Auth />} />
+        
+        {/* Unified Layout */}
+        <Route element={<MainLayout />}>
+          {/* Attendee content */}
+          <Route path="/explore" element={<Explore />} />
+          <Route path="/voting" element={<Voting />} />
+          <Route path="/event/:id" element={<EventDetail />} />
+          <Route path="/tickets" element={<TicketWallet />} />
+          <Route path="/upgrade" element={<Upgrade />} />
+  
+          {/* Organizer content */}
+          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/admin" element={<AdminDashboard />} />
+          <Route path="/profile" element={<Profile />} />
+          <Route path="/dashboard/events/create" element={<CreateEvent />} />
+          <Route path="/dashboard/scanner" element={<EventScanner />} />
+  
+          <Route path="/dashboard/events" element={<EventsManagement />} />
+          <Route path="/dashboard/analytics" element={<Analytics />} />
+          <Route path="/dashboard/attendees" element={<AttendeeList />} />
+          <Route path="/dashboard/voting" element={<PollManager />} />
+          <Route path="/dashboard/settings" element={<Profile />} />
+        </Route>
+  
+        <Route path="/" element={<Navigate to="/auth" replace />} />
+      </Routes>
+    </ToastProvider>
   );
 }
 
