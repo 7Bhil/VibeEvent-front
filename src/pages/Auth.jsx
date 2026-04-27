@@ -70,9 +70,9 @@ const Auth = () => {
 
 
     return (
-        <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row font-['Inter'] selection:bg-red-500/30">
+        <div className="h-screen overflow-hidden bg-white flex flex-col lg:flex-row font-['Inter'] selection:bg-red-500/30">
             {/* Left Side - Visual */}
-            <div className="hidden lg:flex lg:w-1/2 relative overflow-hidden bg-black items-start justify-center p-20 border-r border-slate-200 pt-32">
+            <div className="hidden lg:flex lg:w-5/12 relative overflow-hidden bg-red-600 items-center justify-center p-8 xl:p-10 border-r border-red-200">
                 {/* Background Party Image with Overlay */}
                 <div className="absolute inset-0">
                     <img 
@@ -80,79 +80,105 @@ const Auth = () => {
                         alt="Ambiance de fête" 
                         className="w-full h-full object-cover opacity-60 scale-110 blur-[2px]"
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-[#f8fafc]/60 to-transparent"></div>
-                    <div className="absolute inset-0 bg-gradient-to-r from-[#f8fafc]/40 to-transparent"></div>
+                    <div className="absolute inset-0 bg-linear-to-t from-red-950/75 via-red-900/40 to-white/5"></div>
+                    <div className="absolute inset-0 bg-linear-to-r from-white/10 via-transparent to-white/5"></div>
                 </div>
 
-                <div className="relative z-10 max-w-xl">
-                    <div className="mb-24 flex items-center gap-2">
-                        <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>
-                        <h2 className="text-slate-900 font-black text-2xl tracking-tighter">evenflow</h2>
+                <div className="relative z-10 max-w-lg xl:max-w-xl px-2">
+                    <div className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/10 px-3 py-1 text-[9px] font-black uppercase tracking-[0.26em] text-white/90 backdrop-blur-md shadow-[0_10px_30px_rgba(15,23,42,0.18)] mb-5">
+                        <span className="h-1.5 w-1.5 rounded-full bg-red-300"></span>
+                        Plateforme événementielle premium
                     </div>
 
-                    <h1 className="text-slate-900 text-7xl font-black leading-[0.95] mb-8 tracking-tighter">
-                        Rejoignez la <br />
-                        <span className="italic font-light text-slate-500">nouvelle scène</span> de <br />
-                        l'événementiel<span className="text-red-500">.</span>
-                    </h1>
-                    
-                    <p className="text-slate-500 text-lg mb-16 leading-relaxed max-w-md">
-                        Vivez des expériences exclusives dans le monde réel et numérique. L'accès vous attend.
-                    </p>
+                    <div className="rounded-[28px] border border-white/15 bg-black/20 p-5 xl:p-6 backdrop-blur-xl shadow-[0_24px_80px_rgba(15,23,42,0.18)]">
+                        <div className="mb-6 flex items-center gap-2">
+                            <div className="h-7 w-7 rounded-lg bg-linear-to-tr from-red-500 via-red-400 to-orange-300 shadow-lg shadow-red-500/25"></div>
+                            <h2 className="text-white font-black text-xl xl:text-2xl tracking-tighter">evenflow</h2>
+                        </div>
+
+                        <h1 className="text-white text-4xl xl:text-[3.4rem] font-black leading-[0.94] mb-4 tracking-tighter max-w-[11ch]">
+                            Rejoignez la <br />
+                            <span className="italic font-light text-white/75">nouvelle scène</span> de <br />
+                            l'événementiel<span className="text-red-300">.</span>
+                        </h1>
+                        
+                        <p className="text-white/75 text-sm xl:text-base leading-relaxed max-w-[28ch]">
+                            Des expériences exclusives, une identité claire et un accès pensé pour les communautés les plus exigeantes.
+                        </p>
+
+                        <div className="mt-6 grid grid-cols-2 gap-3">
+                            <div className="rounded-2xl border border-white/10 bg-white/8 px-3 py-2.5 backdrop-blur-sm">
+                                <p className="text-[8px] font-black uppercase tracking-[0.22em] text-white/55 mb-1">Accès rapide</p>
+                                <p className="text-sm font-bold text-white">Connexion fluide</p>
+                            </div>
+                            <div className="rounded-2xl border border-white/10 bg-white/8 px-3 py-2.5 backdrop-blur-sm">
+                                <p className="text-[8px] font-black uppercase tracking-[0.22em] text-white/55 mb-1">Expérience</p>
+                                <p className="text-sm font-bold text-white">Premium & immersive</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
 
             {/* Right Side - Form Container */}
-            <div className="flex-1 flex flex-col items-center justify-center p-8 lg:p-24 relative bg-slate-950/50">
-                <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-red-500/10 blur-[120px] rounded-full pointer-events-none"></div>
+            <div className="flex-1 flex items-center justify-center px-4 py-4 lg:px-8 xl:px-10 relative bg-linear-to-b from-white via-white to-red-50/25">
+                <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,rgba(239,68,68,0.07),transparent_45%)]"></div>
+                <div className="w-full max-w-85 xl:max-w-95 relative z-10">
+                    <div className="overflow-hidden rounded-[30px] border border-black/5 bg-white/95 backdrop-blur-xl shadow-[0_24px_80px_rgba(15,23,42,0.10)]">
+                        <div className="h-1 w-full bg-linear-to-r from-red-700 via-red-500 to-red-700"></div>
+                        <div className="p-4 lg:p-5 xl:p-6">
+                            <div className="mb-3 flex items-start justify-between gap-3">
+                                <div>
+                                    <p className="text-[9px] font-black uppercase tracking-[0.28em] text-red-600 mb-1">Accès sécurisé</p>
+                                    <h2 className="text-black text-[22px] xl:text-3xl font-black leading-[1.02] tracking-tight">
+                                        {isLogin ? 'Ravi de vous revoir' : 'Créer un compte'}
+                                    </h2>
+                                    <p className="mt-1.5 text-red-600 text-[11px] xl:text-sm leading-snug max-w-[28ch]">
+                                        {isLogin ? 'Connectez-vous pour continuer l\'aventure.' : 'Rejoignez la communauté aujourd\'hui.'}
+                                    </p>
+                                </div>
+                                <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-600 shadow-sm">
+                                    <ShieldCheck size={18} strokeWidth={2.25} />
+                                </div>
+                            </div>
 
-                <div className="w-full max-w-md relative z-10">
-                    <div className="mb-14">
-                        <h2 className="text-slate-900 text-4xl font-extrabold mb-3 tracking-tight">
-                            {isLogin ? 'Ravi de vous revoir' : 'Créer un compte'}
-                        </h2>
-                        <p className="text-slate-500 text-lg">
-                            {isLogin ? 'Connectez-vous pour continuer l\'aventure.' : 'Rejoignez la communauté aujourd\'hui.'}
-                        </p>
-                    </div>
+                            {/* Login/Signup Toggle */}
+                            <div className="flex gap-1.5 rounded-2xl border border-black/5 bg-slate-50 p-1">
+                                <button 
+                                    type="button"
+                                    onClick={() => setIsLogin(true)}
+                                    className={cn(
+                                        "flex-1 rounded-xl px-3 py-2 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300",
+                                        isLogin ? "bg-red-600 text-white shadow-[0_10px_25px_rgba(239,68,68,0.22)]" : "bg-transparent text-slate-600 hover:text-black"
+                                    )}
+                                >
+                                    Connexion
+                                </button>
+                                <button 
+                                    type="button"
+                                    onClick={() => setIsLogin(false)}
+                                    className={cn(
+                                        "flex-1 rounded-xl px-3 py-2 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300",
+                                        !isLogin ? "bg-red-600 text-white shadow-[0_10px_25px_rgba(239,68,68,0.22)]" : "bg-transparent text-slate-600 hover:text-black"
+                                    )}
+                                >
+                                    Inscription
+                                </button>
+                            </div>
 
-                    {/* Login/Signup Toggle */}
-                    <div className="flex bg-slate-50/50 p-1.5 rounded-2xl mb-12 border border-slate-200">
-                        <button 
-                            type="button"
-                            onClick={() => setIsLogin(true)}
-                            className={cn(
-                                "flex-1 py-3 text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300",
-                                isLogin ? "bg-white text-slate-900 shadow-xl shadow-black/40 border border-slate-200" : "text-slate-500 hover:text-slate-300"
-                            )}
-                        >
-                            Connexion
-                        </button>
-                        <button 
-                            type="button"
-                            onClick={() => setIsLogin(false)}
-                            className={cn(
-                                "flex-1 py-3 text-xs font-bold uppercase tracking-widest rounded-xl transition-all duration-300",
-                                !isLogin ? "bg-white text-slate-900 shadow-xl shadow-black/40 border border-slate-200" : "text-slate-500 hover:text-slate-300"
-                            )}
-                        >
-                            Inscription
-                        </button>
-                    </div>
-
-                    <form onSubmit={handleSubmit} className="space-y-8">
+                            <form onSubmit={handleSubmit} className="space-y-2.5 pt-4">
                         {error && (
-                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 py-4 px-6 rounded-2xl text-[11px] font-black uppercase tracking-widest text-center">
+                            <div className="bg-red-500/10 border border-red-500/20 text-red-500 py-2 px-4 rounded-2xl text-[10px] font-black uppercase tracking-widest text-center">
                                 {error}
                             </div>
                         )}
 
                         {!isLogin && (
-                            <div className="space-y-3">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Nom complet</label>
+                            <div className="space-y-1.5">
+                                <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Nom complet</label>
                                 <div className="relative group">
-                                    <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-red-600 transition-colors pointer-events-none">
-                                        <User size={20} strokeWidth={2.5} />
+                                    <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
+                                        <User size={16} strokeWidth={2.5} />
                                     </div>
                                     <input 
                                         name="name"
@@ -160,19 +186,19 @@ const Auth = () => {
                                         required
                                         value={formData.name}
                                         onChange={handleChange}
-                                        placeholder="Votre nom"
-                                        className="w-full bg-slate-50/40 border border-slate-200 rounded-2xl py-5 pl-14 pr-6 text-slate-900 placeholder:text-slate-700 focus:bg-slate-50/60 focus:border-red-500/30 focus:ring-4 focus:ring-red-500/5 transition-all outline-none text-sm font-medium"
+                                        placeholder=" votre nom"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
                                     />
                                 </div>
                             </div>
                         )}
 
 
-                        <div className="space-y-3">
-                            <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em] ml-1">Adresse Email</label>
+                        <div className="space-y-1.5">
+                            <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Adresse Email</label>
                             <div className="relative group">
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-red-600 transition-colors pointer-events-none">
-                                    <Mail size={20} strokeWidth={2.5} />
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
+                                    <Mail size={16} strokeWidth={2.5} />
                                 </div>
                                 <input 
                                     name="email"
@@ -180,20 +206,20 @@ const Auth = () => {
                                     required
                                     value={formData.email}
                                     onChange={handleChange}
-                                    placeholder="votre@email.com"
-                                    className="w-full bg-slate-50/40 border border-slate-200 rounded-2xl py-5 pl-14 pr-6 text-slate-900 placeholder:text-slate-700 focus:bg-slate-50/60 focus:border-red-500/30 focus:ring-4 focus:ring-red-500/5 transition-all outline-none text-sm font-medium"
+                                    placeholder=" votre@email.com"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
                                 />
                             </div>
                         </div>
 
-                        <div className="space-y-3">
-                            <div className="flex justify-between items-center ml-1">
-                                <label className="text-[10px] font-black text-slate-500 uppercase tracking-[0.2em]">Mot de passe</label>
-                                {isLogin && <a href="#" className="text-[10px] font-black text-cyan-400 uppercase tracking-widest hover:text-cyan-300 transition-colors">Oublié ?</a>}
+                        <div className="space-y-1.5">
+                                <div className="flex justify-between items-center ml-1 gap-2">
+                                <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em]">Mot de passe</label>
+                                {isLogin && <a href="#" className="text-[8px] font-black text-slate-500 uppercase tracking-widest hover:text-red-700 transition-colors">Oublié ?</a>}
                             </div>
                             <div className="relative group">
-                                <div className="absolute left-5 top-1/2 -translate-y-1/2 text-slate-600 group-focus-within:text-red-600 transition-colors pointer-events-none">
-                                    <Lock size={20} strokeWidth={2.5} />
+                                <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
+                                    <Lock size={16} strokeWidth={2.5} />
                                 </div>
                                 <input 
                                     name="password"
@@ -201,15 +227,15 @@ const Auth = () => {
                                     required
                                     value={formData.password}
                                     onChange={handleChange}
-                                    placeholder="••••••••••••"
-                                    className="w-full bg-slate-50/40 border border-slate-200 rounded-2xl py-5 pl-14 pr-14 text-slate-900 placeholder:text-slate-700 focus:bg-slate-50/60 focus:border-red-500/30 focus:ring-4 focus:ring-red-500/5 transition-all outline-none text-sm font-medium"
+                                    placeholder=" ••••••••••••"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-9 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
                                 />
                                 <button 
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
-                                    className="absolute right-5 top-1/2 -translate-y-1/2 text-slate-600 hover:text-slate-500 transition-colors"
+                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors"
                                 >
-                                    {showPassword ? <EyeOff size={20} strokeWidth={2} /> : <Eye size={20} strokeWidth={2} />}
+                                    {showPassword ? <EyeOff size={16} strokeWidth={2} /> : <Eye size={16} strokeWidth={2} />}
                                 </button>
                             </div>
                         </div>
@@ -218,37 +244,42 @@ const Auth = () => {
                             type="submit"
                             disabled={loading}
                             className={cn(
-                                "w-full bg-gradient-to-r from-red-500 via-red-600 to-cyan-500 text-slate-900 font-black py-5 rounded-2xl uppercase tracking-[0.2em] text-[11px] shadow-2xl shadow-red-500/20 hover:scale-[1.01] hover:brightness-110 active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 disabled:grayscale mt-4",
+                                "w-full bg-red-600 text-white font-black py-2 rounded-2xl uppercase tracking-[0.14em] text-[9px] shadow-[0_14px_35px_rgba(239,68,68,0.20)] hover:bg-red-700 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 disabled:grayscale mt-2.5",
                                 loading && "cursor-not-allowed"
                             )}
                         >
                             {loading ? 'Entrée...' : isLogin ? 'Entrer sur scène' : 'Créer le compte'}
                         </button>
 
-                        <div className="relative flex items-center py-6">
-                            <div className="flex-grow border-t border-slate-200"></div>
-                            <span className="flex-shrink mx-6 text-[9px] font-black text-slate-600 uppercase tracking-[0.3em]">Ou continuer avec</span>
-                            <div className="flex-grow border-t border-slate-200"></div>
+                        <div className="relative flex items-center py-1.5">
+                            <div className="grow border-t border-slate-200"></div>
+                            <span className="shrink mx-4 text-[8px] font-black text-slate-500 uppercase tracking-[0.25em]">Ou continuer avec</span>
+                            <div className="grow border-t border-slate-200"></div>
                         </div>
 
-                        <div className="grid grid-cols-2 gap-4">
-                            <button type="button" className="flex items-center justify-center gap-3 bg-slate-50/40 text-slate-300 py-4 rounded-2xl border border-slate-200 hover:border-slate-200 hover:bg-slate-50/60 transition-all group">
-                                <Globe size={18} className="text-slate-500 group-hover:text-slate-900 transition-colors" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-900">Google</span>
+                        <div className="grid grid-cols-2 gap-2">
+                            <button type="button" className="flex items-center justify-center gap-1.5 bg-slate-50 text-slate-900 py-1.5 rounded-2xl border border-slate-200 hover:border-red-200 hover:bg-white hover:shadow-md transition-all group">
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-red-500 shadow-sm ring-1 ring-red-100">
+                                    <Globe size={12} className="group-hover:text-red-700 transition-colors" />
+                                </span>
+                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Google</span>
                             </button>
-                            <button type="button" className="flex items-center justify-center gap-3 bg-slate-50/40 text-slate-300 py-4 rounded-2xl border border-slate-200 hover:border-slate-200 hover:bg-slate-50/60 transition-all group">
-                                <AppleIcon size={18} className="text-slate-500 group-hover:text-slate-900 transition-colors" />
-                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-500 group-hover:text-slate-900">Apple ID</span>
+                            <button type="button" className="flex items-center justify-center gap-1.5 bg-slate-50 text-slate-900 py-1.5 rounded-2xl border border-slate-200 hover:border-red-200 hover:bg-white hover:shadow-md transition-all group">
+                                <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-red-500 shadow-sm ring-1 ring-red-100">
+                                    <AppleIcon size={12} className="group-hover:text-red-700 transition-colors" />
+                                </span>
+                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Apple ID</span>
                             </button>
                         </div>
-                    </form>
 
-                    <div className="mt-16 text-center">
-                        <div className="flex justify-center gap-8 text-[9px] font-black text-slate-600 uppercase tracking-[0.2em] mb-6">
-                            <a href="#" className="hover:text-slate-500 transition-colors">Politique de Confidentialité</a>
-                            <a href="#" className="hover:text-slate-500 transition-colors">Conditions d'Utilisation</a>
+                        <div className="flex justify-center mt-2">
+                            <div className="inline-flex flex-col items-center gap-0.5 text-[8px] font-black text-red-500 uppercase tracking-[0.18em] px-2.5 py-0.5 -mt-1">
+                                <a href="#" className="hover:text-red-700 transition-colors">Politique de Confidentialité</a>
+                                <a href="#" className="hover:text-red-700 transition-colors">Conditions d'Utilisation</a>
+                            </div>
                         </div>
-                        <p className="text-[9px] text-slate-700 font-bold tracking-[0.1em] uppercase">© 2024 THE evenflow STAGE. ACCÈS SÉCURISÉ.</p>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
