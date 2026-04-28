@@ -96,26 +96,26 @@ const Explore = () => {
             <main className="pb-20">
                 {/* Hero section */}
                 <div className="relative w-full h-[50vh] lg:h-[70vh] px-4 lg:px-12 pt-4 lg:pt-8 mb-8 lg:mb-16 group">
-                    <div className="w-full h-full relative rounded-[32px] lg:rounded-[48px] overflow-hidden">
+                    <div className="w-full h-full relative rounded-4xl lg:rounded-[48px] overflow-hidden">
                         <img 
                             src="https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80" 
                             className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-[2s] opacity-70"
                             alt="Featured"
                         />
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-transparent to-transparent"></div>
-                        <div className="absolute inset-0 bg-gradient-to-r from-[#f8fafc]/60 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-linear-to-t from-black/65 via-black/10 to-transparent"></div>
+                        <div className="absolute inset-0 bg-linear-to-r from-black/30 via-transparent to-transparent"></div>
                         
-                        <div className="absolute bottom-8 lg:bottom-16 left-8 lg:left-16 right-8 lg:right-auto z-10">
+                        <div className="absolute bottom-6 lg:bottom-10 left-8 lg:left-16 right-8 lg:right-auto z-10">
                             <div className="flex items-center gap-3 mb-4 lg:mb-6">
-                                <span className="bg-red-600/30 text-purple-300 text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-red-500/30 backdrop-blur-md">
+                                <span className="bg-black/60 text-white text-[9px] lg:text-[10px] font-black uppercase tracking-[0.2em] px-3 py-1.5 rounded-full border border-white/15 backdrop-blur-md">
                                     Tournée exclusive
                                 </span>
-                                <span className="text-slate-400 text-[9px] lg:text-[10px] font-bold uppercase tracking-widest">Arrive en Août</span>
+                                <span className="text-white text-[9px] lg:text-[10px] font-bold uppercase tracking-widest">Arrive en Août</span>
                             </div>
-                            <h1 className="text-4xl md:text-6xl lg:text-8xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9]">
+                            <h1 className="text-4xl md:text-5xl lg:text-7xl font-black tracking-tighter mb-4 lg:mb-8 leading-[0.9] text-white">
                                 Luminous <br /> Echoes 2024
                             </h1>
-                            <p className="text-slate-300 text-sm lg:text-lg font-medium mb-6 lg:mb-10 max-w-xl leading-relaxed lg:block hidden">
+                            <p className="text-white text-sm lg:text-lg font-medium mb-6 lg:mb-10 max-w-xl leading-relaxed lg:block hidden">
                                 Découvrez la première mondiale de l'expérience audio-visuelle la plus immersive de la décennie.
                             </p>
                             <div className="flex flex-col sm:flex-row gap-3 lg:gap-4">
@@ -138,11 +138,11 @@ const Explore = () => {
                             <Filter size={20} />
                         </button>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-8 px-8 lg:mx-0 lg:px-0">
+                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-8 px-8 lg:mx-0 lg:px-0 bg-white">
                         {categories.map((cat, i) => (
                             <button 
                                 key={i}
-                                className={`flex items-center gap-3 px-6 py-4 rounded-2xl border whitespace-nowrap transition-all ${
+                                className={`flex items-center gap-3 px-6 py-2 lg:py-3 rounded-2xl border whitespace-nowrap transition-all ${
                                     cat.active 
                                     ? "bg-red-600 border-red-500 shadow-xl shadow-red-500/20 text-white" 
                                     : "bg-slate-100 border-slate-200 text-slate-500 hover:border-slate-200 hover:text-slate-900"
@@ -174,7 +174,7 @@ const Explore = () => {
                             >
                                 <div className="h-64 relative overflow-hidden shrink-0">
                                     <img src={event.image || 'https://images.unsplash.com/photo-1514525253361-b83f85df0f5c?auto=format&fit=crop&w=600&q=80'} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" alt={event.title} />
-                                    <div className="absolute inset-0 bg-gradient-to-t from-[#f8fafc] via-transparent to-transparent"></div>
+                                    <div className="absolute inset-0 bg-linear-to-t from-[#f8fafc] via-transparent to-transparent"></div>
                                     <div className="absolute top-4 left-4">
                                         <span className="bg-black/40 backdrop-blur-md text-slate-900 text-[9px] font-black uppercase tracking-widest px-2.5 py-1.5 rounded-xl border border-slate-200">
                                             {new Date(event.date).toLocaleDateString()}
@@ -194,7 +194,7 @@ const Explore = () => {
                                 <div className="p-8 flex-1 flex flex-col justify-between">
                                     <div>
                                         <div className="flex justify-between items-start mb-4">
-                                            <h3 className="text-xl font-black tracking-tight max-w-[150px] leading-tight line-clamp-2">{event.title}</h3>
+                                            <h3 className="text-xl font-black tracking-tight max-w-37.5 leading-tight line-clamp-2">{event.title}</h3>
                                             <span className="text-red-600 font-black tracking-tighter text-lg">{getMinPrice(event.tickets)}</span>
                                         </div>
                                         <div className="space-y-2 text-slate-500">
@@ -221,13 +221,13 @@ const Explore = () => {
 
                 {/* Newsletter / Call to action */}
                 <div className="px-8 lg:px-12">
-                    <div className="bg-white border border-slate-200 rounded-[64px] p-20 flex flex-col md:flex-row items-center justify-between gap-12 relative overflow-hidden">
+                    <div className="bg-white border border-slate-200 rounded-[64px] p-20 flex flex-col items-start gap-8 relative overflow-hidden">
                         <div className="absolute -right-20 -top-20 w-80 h-80 bg-red-600/10 blur-[100px] rounded-full"></div>
-                        <div className="relative z-10 max-w-xl text-center md:text-left">
-                            <h2 className="text-3xl md:text-5xl font-black tracking-tighter mb-6 leading-tight">Ne manquez pas <br className="hidden md:block" /> la prochaine étape.</h2>
-                            <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed">Inscrivez-vous pour recevoir des recommandations hebdomadaires.</p>
+                        <div className="relative z-10 max-w-3xl text-center md:text-left">
+                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter mb-4 leading-tight whitespace-nowrap">Ne manquez pas la prochaine étape.</h2>
+                            <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed whitespace-nowrap">Inscrivez-vous pour recevoir des recommandations hebdomadaires.</p>
                         </div>
-                        <div className="relative z-10 flex flex-col sm:flex-row w-full md:w-auto gap-4">
+                        <div className="relative z-10 flex flex-col sm:flex-row w-full md:w-auto gap-4 mt-2">
                             <input 
                                 type="email" 
                                 placeholder="Votre email" 
