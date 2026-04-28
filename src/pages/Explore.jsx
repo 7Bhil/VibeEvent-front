@@ -31,6 +31,8 @@ const Explore = () => {
     const navigate = useNavigate();
     const [events, setEvents] = useState([]);
     const [loading, setLoading] = useState(true);
+    const [newsletterEmail, setNewsletterEmail] = useState('');
+    const [subscribed, setSubscribed] = useState(false);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -50,6 +52,15 @@ const Explore = () => {
     }, []);
 
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+    const handleSubscribe = (e) => {
+        e.preventDefault();
+        if (!newsletterEmail) return;
+        // TODO: replace with API call to persist subscription
+        setSubscribed(true);
+        setNewsletterEmail('');
+        setTimeout(() => setSubscribed(false), 5000);
+    };
 
     // Helper to extract min price
     const getMinPrice = (tickets) => {
@@ -138,7 +149,7 @@ const Explore = () => {
                             <Filter size={20} />
                         </button>
                     </div>
-                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-8 px-8 lg:mx-0 lg:px-0 bg-white">
+                    <div className="flex gap-4 overflow-x-auto pb-4 scrollbar-hide -mx-8 px-8 lg:mx-0 lg:px-0.5 ">
                         {categories.map((cat, i) => (
                             <button 
                                 key={i}
@@ -221,22 +232,26 @@ const Explore = () => {
 
                 {/* Newsletter / Call to action */}
                 <div className="px-8 lg:px-12">
-                    <div className="bg-white border border-slate-200 rounded-[64px] p-20 flex flex-col items-start gap-8 relative overflow-hidden">
-                        <div className="absolute -right-20 -top-20 w-80 h-80 bg-red-600/10 blur-[100px] rounded-full"></div>
-                        <div className="relative z-10 max-w-3xl text-center md:text-left">
-                            <h2 className="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter mb-4 leading-tight whitespace-nowrap">Ne manquez pas la prochaine étape.</h2>
-                            <p className="text-slate-500 text-base md:text-lg font-medium leading-relaxed whitespace-nowrap">Inscrivez-vous pour recevoir des recommandations hebdomadaires.</p>
-                        </div>
-                        <div className="relative z-10 flex flex-col sm:flex-row w-full md:w-auto gap-4 mt-2">
-                            <input 
-                                type="email" 
-                                placeholder="Votre email" 
-                                className="bg-slate-100 border border-slate-200 rounded-2xl py-4 px-6 outline-none focus:border-red-500/30 w-full md:w-80 font-medium"
-                            />
-                            <button className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-10 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all whitespace-nowrap shadow-xl shadow-red-500/20">
-                                S'abonner
-                            </button>
-                        </div>
+                    <div className="bg-white border border-slate-200 rounded-[64px] p-8 sm:p-12 lg:p-20 flex flex-col items-start gap-6 relative overflow-hidden">
+                            <div className="relative z-10 max-w-3xl text-center md:text-left">
+                                <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter mb-2 leading-tight">Ne manquez pas la prochaine étape.</h2>
+                                <p className="text-slate-500 text-sm md:text-base font-medium leading-relaxed">Inscrivez-vous pour recevoir des recommandations hebdomadaires.</p>
+                            </div>
+                            <form onSubmit={handleSubscribe} className="relative z-10 flex flex-col sm:flex-row w-full md:w-auto gap-3 mt-1">
+                                <input 
+                                    type="email" 
+                                    aria-label="Email pour recommandations"
+                                    required
+                                    value={newsletterEmail}
+                                    onChange={(e) => setNewsletterEmail(e.target.value)}
+                                    placeholder="Votre email" 
+                                    className="bg-slate-100 border border-slate-200 rounded-2xl py-3 px-4 md:py-4 md:px-6 outline-none focus:border-red-500/30 w-full md:w-80 font-medium"
+                                />
+                                <button type="submit" className="bg-red-600 hover:bg-red-500 text-white font-black py-3 px-6 md:py-4 md:px-10 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all w-full sm:w-auto shadow-xl shadow-red-500/20">
+                                    S'abonner
+                                </button>
+                            </form>
+                            {subscribed && <div className="text-sm text-emerald-600 font-bold mt-1">Merci — vous êtes inscrit(e) !</div>}
                     </div>
                 </div>
             </main>
