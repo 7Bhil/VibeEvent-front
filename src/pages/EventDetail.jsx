@@ -19,6 +19,30 @@ const EventDetail = () => {
     const [loading, setLoading] = useState(true);
     const [purchasing, setPurchasing] = useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null);
+    const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+    const handleGoBack = () => {
+        if (event && event.createdBy) {
+            // Check if createdBy is a string (ObjectId) or an object (populated user)
+            const createdById = typeof event.createdBy === 'string' 
+                ? event.createdBy 
+                : event.createdBy._id;
+            
+            // Compare with current user
+            const currentUserId = currentUser._id || currentUser.id;
+            
+            if (createdById === currentUserId) {
+                // User created this event, go back to their management dashboard
+                navigate('/dashboard/events');
+            } else {
+                // User is browsing, go back to explore
+                navigate('/explore');
+            }
+        } else {
+            // Default to explore if we can't determine ownership
+            navigate('/explore');
+        }
+    };
 
     useEffect(() => {
         const fetchEvent = async () => {
@@ -113,7 +137,7 @@ const EventDetail = () => {
 
                             <div className="absolute left-3 right-3 top-3 flex items-center justify-between gap-2 sm:left-6 sm:right-6 sm:top-6">
                                 <button 
-                                    onClick={() => navigate('/explore')}
+                                    onClick={handleGoBack}
                                     className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white/90 px-3 py-2 text-sm font-bold text-slate-900 shadow-sm backdrop-blur-md transition-all hover:bg-white sm:px-4 sm:py-2.5"
                                 >
                                     <ChevronLeft size={18} />
