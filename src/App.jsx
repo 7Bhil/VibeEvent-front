@@ -39,6 +39,7 @@ function App() {
           <Route path="/admin" element={<AdminDashboard />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/dashboard/events/create" element={<CreateEvent />} />
+          <Route path="/dashboard/events/edit/:id" element={<CreateEvent />} />
           <Route path="/dashboard/scanner" element={<EventScanner />} />
   
           <Route path="/dashboard/events" element={<EventsManagement />} />

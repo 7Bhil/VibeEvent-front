@@ -110,6 +110,7 @@ const EventsManagement = () => {
                                     <Eye size={18} />
                                 </button>
                                 <button 
+                                    onClick={() => navigate(`/dashboard/events/edit/${event._id}`)}
                                     className="p-4 bg-slate-100 text-slate-500 rounded-2xl hover:bg-slate-200 hover:text-slate-900 transition-all"
                                     title="Modifier"
                                 >

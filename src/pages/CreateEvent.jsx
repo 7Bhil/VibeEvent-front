@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, MapPin, Tag, DollarSign, Users, Image as ImageIcon, Sparkles, Loader2, CheckCircle2, Ticket, Globe } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { useToast } from '../components/Toast';
 
 const CreateEvent = () => {
     const navigate = useNavigate();
+    const { id } = useParams();
+    const isEditing = !!id;
     const { showToast } = useToast();
     const [loading, setLoading] = useState(false);
     const [success, setSuccess] = useState(false);
+    const [initialLoad, setInitialLoad] = useState(isEditing);
     
     // Nouveaux champs pour les tickets, la devise et maps
     const [formData, setFormData] = useState({
@@ -27,6 +30,62 @@ const CreateEvent = () => {
             Premium: { enabled: false, price: 0, limit: '', unlimited: true }
         }
     });
+
+    // Load existing event if editing
+    useEffect(() => {
+        if (isEditing) {
+            const fetchEvent = async () => {
+                try {
+                    const response = await fetch(`http://localhost:5000/api/events/${id}`);
+                    const data = await response.json();
+                    if (response.ok) {
+                        // Convert date to datetime-local format
+                        const dateObj = new Date(data.date);
+                        const localDateTime = dateObj.toISOString().slice(0, 16);
+
+                        // Reconstruct ticket state
+                        const ticketsState = {
+                            Standard: { enabled: false, price: 0, limit: '', unlimited: true },
+                            VIP: { enabled: false, price: 0, limit: '', unlimited: true },
+                            'Early Bird': { enabled: false, price: 0, limit: '', unlimited: true },
+                            Premium: { enabled: false, price: 0, limit: '', unlimited: true }
+                        };
+
+                        data.tickets.forEach(ticket => {
+                            ticketsState[ticket.tier] = {
+                                enabled: true,
+                                price: ticket.price,
+                                limit: ticket.limit || '',
+                                unlimited: ticket.limit === null
+                            };
+                        });
+
+                        setFormData({
+                            title: data.title,
+                            description: data.description,
+                            date: localDateTime,
+                            location: data.location,
+                            googleMapsLink: data.googleMapsLink || '',
+                            category: data.category,
+                            currency: data.currency || 'EUR',
+                            image: data.image || '',
+                            tickets: ticketsState
+                        });
+                    } else {
+                        showToast("Impossible de charger l'événement", "error");
+                        navigate('/dashboard/events');
+                    }
+                } catch (err) {
+                    console.error(err);
+                    showToast("Erreur lors du chargement", "error");
+                    navigate('/dashboard/events');
+                } finally {
+                    setInitialLoad(false);
+                }
+            };
+            fetchEvent();
+        }
+    }, [id, isEditing, navigate, showToast]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -89,8 +148,15 @@ const CreateEvent = () => {
 
         try {
             const token = localStorage.getItem('token');
-            const response = await fetch('http://localhost:5000/api/events', {
-                method: 'POST',
+            
+            // Si on édite, on fait un PUT, sinon un POST
+            const method = isEditing ? 'PUT' : 'POST';
+            const url = isEditing 
+                ? `http://localhost:5000/api/events/${id}` 
+                : 'http://localhost:5000/api/events';
+            
+            const response = await fetch(url, {
+                method,
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': `Bearer ${token}`
@@ -99,12 +165,13 @@ const CreateEvent = () => {
             });
 
             if (response.ok) {
-                showToast("Événement publié avec succès !", "success");
+                const successMsg = isEditing ? "Événement modifié avec succès !" : "Événement publié avec succès !";
+                showToast(successMsg, "success");
                 setSuccess(true);
                 setTimeout(() => navigate('/dashboard/events'), 2000);
             } else {
                 const data = await response.json();
-                showToast(data.message || 'Erreur lors de la création', "error");
+                showToast(data.message || 'Erreur lors de l\'opération', "error");
             }
         } catch (err) {
             console.error(err);
@@ -120,8 +187,16 @@ const CreateEvent = () => {
                 <div className="w-20 h-20 rounded-full bg-emerald-500/10 flex items-center justify-center mb-6 animate-bounce">
                     <CheckCircle2 size={40} className="text-emerald-500" />
                 </div>
-                <h2 className="text-3xl font-black mb-2">Événement créé !</h2>
+                <h2 className="text-3xl font-black mb-2">{isEditing ? 'Événement modifié !' : 'Événement créé !'}</h2>
                 <p className="text-slate-500">Votre événement est maintenant en ligne. Redirection...</p>
+            </div>
+        );
+    }
+
+    if (initialLoad) {
+        return (
+            <div className="flex justify-center items-center min-h-[60vh]">
+                <Loader2 className="animate-spin text-red-500" size={50} />
             </div>
         );
     }
@@ -131,7 +206,7 @@ const CreateEvent = () => {
             <div className="mb-12">
                 <div className="flex items-center gap-3 mb-4">
                     <Sparkles className="text-red-500" size={32} />
-                    <h1 className="text-4xl font-black tracking-tighter">Créer un événement</h1>
+                    <h1 className="text-4xl font-black tracking-tighter">{isEditing ? 'Modifier l\'événement' : 'Créer un événement'}</h1>
                 </div>
                 <p className="text-slate-500 font-medium text-lg italic">Configurez les accès, les tarifs et les détails.</p>
             </div>
@@ -371,7 +446,7 @@ const CreateEvent = () => {
                         disabled={loading}
                         className="w-full bg-gradient-to-r from-red-600 to-red-600 hover:from-red-500 hover:to-red-500 text-slate-900 font-black py-6 rounded-[32px] text-xs uppercase tracking-[0.3em] flex items-center justify-center gap-3 shadow-2xl shadow-red-500/20 transition-all active:scale-[0.98]"
                     >
-                        {loading ? <Loader2 className="animate-spin" /> : "Publier l'événement maintenant"}
+                        {loading ? <Loader2 className="animate-spin" /> : isEditing ? "Enregistrer les modifications" : "Publier l'événement maintenant"}
                     </button>
                 </div>
             </form>
