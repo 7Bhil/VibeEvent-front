@@ -45,19 +45,23 @@ const Profile = () => {
 
 
     return (
-        <div className="p-6 sm:p-8 lg:p-10 max-w-5xl mx-auto">
-            <div className="mb-12">
-                <h1 className="text-4xl font-black tracking-tighter mb-2">Mon Profil</h1>
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+            <div className="max-w-5xl mx-auto px-6 sm:px-8 lg:px-10 py-10 sm:py-12">
+            <div className="mb-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-4">
+                    Profil
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tighter mb-2 text-slate-900">Mon Profil</h1>
                 <p className="text-slate-500 font-medium">Gérez votre identité et vos accès sur Evenflow.</p>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 lg:gap-10">
                 {/* Left - Identity Card */}
                 <div className="lg:col-span-1 space-y-6">
-                    <div className="bg-slate-100 border border-slate-200 rounded-4xl p-6 sm:p-8 text-center relative overflow-hidden group">
-                        <div className="absolute inset-0 bg-linear-to-b from-red-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <div className="bg-white border border-slate-200/70 rounded-4xl p-6 sm:p-8 text-center relative overflow-hidden group shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
+                        <div className="absolute inset-0 bg-linear-to-b from-slate-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                         
-                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-linear-to-tr from-red-600 to-red-500 mx-auto mb-4 sm:mb-6 flex items-center justify-center text-2xl sm:text-3xl font-black shadow-2xl shadow-red-500/20 relative z-10">
+                        <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-linear-to-tr from-slate-900 to-slate-700 mx-auto mb-4 sm:mb-6 flex items-center justify-center text-2xl sm:text-3xl font-black shadow-2xl shadow-slate-900/20 relative z-10 text-white">
                             {user.name?.charAt(0)}
                         </div>
 
@@ -68,7 +72,7 @@ const Profile = () => {
                             <span className={cn(
                                 "px-3 py-1 rounded-full text-[9px] font-black uppercase tracking-widest border",
                                 user.role === 'admin' ? "bg-red-500/10 text-red-500 border-red-500/20" :
-                                user.role === 'organizer' ? "bg-red-500/10 text-red-600 border-red-500/20" :
+                                    user.role === 'organizer' ? "bg-slate-900/10 text-slate-800 border-slate-300" :
                                 "bg-slate-500/10 text-slate-500 border-slate-500/20"
                             )}>
                                 {user.role === 'admin' ? 'Administrateur' : user.role === 'organizer' ? 'Organisateur' : 'Participant'}
@@ -76,7 +80,7 @@ const Profile = () => {
                         </div>
                     </div>
 
-                    <div className="bg-slate-100 border border-slate-200 rounded-4xl p-6 space-y-4">
+                    <div className="bg-white border border-slate-200/70 rounded-4xl p-6 space-y-4 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                         <div className="flex items-center gap-4">
                             <div className="w-10 h-10 rounded-xl bg-slate-100 flex items-center justify-center text-slate-500">
                                 <Mail size={18} />
@@ -103,9 +107,9 @@ const Profile = () => {
                 {/* Right - Content Area */}
                 <div className="lg:col-span-2 space-y-8">
                     {/* Organization Section */}
-                    <section className="bg-slate-100 border border-slate-200 rounded-[40px] p-6 sm:p-8">
+                    <section className="bg-white border border-slate-200/70 rounded-[40px] p-6 sm:p-8 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                         <div className="flex items-center gap-3 mb-6">
-                            <Building className="text-red-500" size={20} />
+                            <Building className="text-slate-700" size={20} />
                             <h2 className="text-xl sm:text-2xl font-black tracking-tight">Organisation</h2>
                         </div>
 
@@ -115,14 +119,14 @@ const Profile = () => {
                                     <h4 className="font-bold text-lg mb-1">{user.organization.name || "Ma Structure"}</h4>
                                     <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Membre actif</p>
                                 </div>
-                                <button className="text-[10px] font-black text-red-500 uppercase tracking-widest hover:underline">Quitter</button>
+                                <button className="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:underline">Quitter</button>
                             </div>
                         ) : (
                                 <div className="text-center py-6">
                                 <p className="text-slate-500 mb-4 font-medium">Vous n'appartenez à aucune organisation pour le moment.</p>
                                 {user.role === 'attendee' ? (
-                                    <div className="bg-red-50 border border-red-100 rounded-3xl p-6">
-                                        <AlertCircle className="mx-auto text-red-600 mb-3" size={28} />
+                                    <div className="bg-slate-50 border border-slate-200 rounded-3xl p-6">
+                                        <AlertCircle className="mx-auto text-slate-700 mb-3" size={28} />
                                         <h4 className="font-bold mb-2">Devenir un créateur</h4>
                                         <p className="text-sm text-slate-500 mb-6 max-w-sm mx-auto">
                                             Choisissez le forfait qui vous correspond (Événements ou Sondages) pour commencer à créer.
@@ -130,7 +134,7 @@ const Profile = () => {
                                         
                                         <button 
                                             onClick={() => navigate('/upgrade')}
-                                            className="bg-red-600 hover:bg-red-500 text-white font-black py-2 sm:py-3 px-6 sm:px-10 rounded-2xl text-[9px] sm:text-[10px] uppercase tracking-[0.15em] shadow-md shadow-red-500/20 transition-all flex items-center justify-center mx-auto"
+                                            className="bg-slate-900 hover:bg-slate-800 text-white font-black py-2 sm:py-3 px-6 sm:px-10 rounded-2xl text-[9px] sm:text-[10px] uppercase tracking-[0.15em] shadow-md shadow-slate-900/20 transition-all flex items-center justify-center mx-auto"
                                         >
                                             Voir les Forfaits
                                         </button>
@@ -149,13 +153,13 @@ const Profile = () => {
                     </section>
                     
                     {/* Subscription Section */}
-                    <section className="bg-white border-2 border-slate-200 rounded-[40px] p-6 sm:p-8 relative overflow-hidden">
+                    <section className="bg-white border border-slate-200/70 rounded-[40px] p-6 sm:p-8 relative overflow-hidden shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                         <div className="absolute top-0 right-0 w-64 h-64 bg-slate-50 -mr-20 -mt-20 rounded-full blur-[80px]"></div>
                         
                         <div className="relative z-10">
                             <div className="flex items-center justify-between mb-6 flex-nowrap">
                                 <div className="flex items-center gap-3">
-                                    <div className="w-10 h-10 rounded-2xl bg-red-500/10 flex items-center justify-center text-red-500">
+                                    <div className="w-10 h-10 rounded-2xl bg-slate-100 flex items-center justify-center text-slate-700">
                                         <ArrowUpCircle size={24} />
                                     </div>
                                     <h2 className="text-xl sm:text-2xl font-black tracking-tight whitespace-nowrap">Mon Abonnement</h2>
@@ -201,12 +205,12 @@ const Profile = () => {
 
                     {/* Preferences / Security Section Placeholder */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        <div className="bg-slate-100 border border-slate-200 rounded-4xl p-6 opacity-40">
+                        <div className="bg-slate-50 border border-slate-200 rounded-4xl p-6 opacity-40">
                             <h4 className="font-bold mb-2">Sécurité</h4>
                             <p className="text-xs text-slate-500 mb-6 font-medium">Changez votre mot de passe et activez la 2FA.</p>
                             <div className="h-2 w-24 bg-slate-200 rounded-full"></div>
                         </div>
-                        <div className="bg-slate-100 border border-slate-200 rounded-4xl p-6 opacity-40">
+                        <div className="bg-slate-50 border border-slate-200 rounded-4xl p-6 opacity-40">
                             <h4 className="font-bold mb-2">Paiements</h4>
                             <p className="text-xs text-slate-500 mb-6 font-medium">Gérez vos méthodes de paiement et factures.</p>
                             <div className="h-2 w-24 bg-slate-200 rounded-full"></div>
@@ -222,7 +226,7 @@ const Profile = () => {
                     <button 
                         onClick={handleCreateOrganization}
                         disabled={loading || !newOrgName}
-                        className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-red-500/20 transition-all disabled:opacity-50"
+                        className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-2xl text-[10px] uppercase tracking-widest shadow-lg shadow-slate-900/20 transition-all disabled:opacity-50"
                     >
                         {loading ? "Création..." : "Confirmer la création"}
                     </button>
@@ -235,11 +239,12 @@ const Profile = () => {
                         value={newOrgName}
                         onChange={(e) => setNewOrgName(e.target.value)}
                         placeholder="Ex: Visionary Events"
-                        className="w-full bg-slate-100 border border-transparent rounded-2xl py-4 px-6 outline-none focus:bg-white focus:border-red-500/20 focus:ring-4 focus:ring-red-500/5 transition-all text-sm font-bold"
+                        className="w-full bg-slate-100 border border-transparent rounded-2xl py-4 px-6 outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-200/60 transition-all text-sm font-bold"
                         autoFocus
                     />
                 </div>
             </Modal>
+            </div>
         </div>
     );
 };

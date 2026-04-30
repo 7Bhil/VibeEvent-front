@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, Mail, Clock, ChevronRight, UserCircle, Search, Loader2 } from 'lucide-react';
+import { Users, Mail, Clock, ChevronRight, ChevronLeft, UserCircle, Search, Loader2 } from 'lucide-react';
 
 const AttendeeList = () => {
     const [events, setEvents] = useState([]);
@@ -8,6 +8,8 @@ const AttendeeList = () => {
     const [loading, setLoading] = useState(true);
     const [attendeesLoading, setAttendeesLoading] = useState(false);
     const [searchTerm, setSearchTerm] = useState('');
+    const [isMobile, setIsMobile] = useState(false);
+    const [mobileOpen, setMobileOpen] = useState(false);
 
     useEffect(() => {
         const fetchEvents = async () => {
@@ -29,9 +31,17 @@ const AttendeeList = () => {
         fetchEvents();
     }, []);
 
+    useEffect(() => {
+        const check = () => setIsMobile(window.innerWidth < 640);
+        check();
+        window.addEventListener('resize', check);
+        return () => window.removeEventListener('resize', check);
+    }, []);
+
     const fetchAttendees = async (eventId) => {
         setSelectedEvent(eventId);
         setAttendeesLoading(true);
+        if (window.innerWidth < 640) setMobileOpen(true);
         try {
             const token = localStorage.getItem('token');
             const response = await fetch(`http://localhost:5000/api/tickets/event/${eventId}/attendees`, {
@@ -55,29 +65,33 @@ const AttendeeList = () => {
 
     if (loading) {
         return (
-            <div className="flex justify-center items-center h-[calc(100vh-80px)]">
-                <Loader2 className="animate-spin text-red-500" size={40} />
+            <div className="flex justify-center items-center h-[calc(100vh-80px)] bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+                <Loader2 className="animate-spin text-slate-700" size={40} />
             </div>
         );
     }
 
     return (
-        <div className="p-10 max-w-7xl mx-auto flex flex-col h-[calc(100vh-80px)] overflow-hidden">
-            <div className="mb-12 shrink-0">
-                <h1 className="text-4xl font-black tracking-tighter mb-4">Liste des Participants</h1>
-                <p className="text-slate-500 font-medium">Gérez la base de données des participants pour chaque événement.</p>
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+            <div className="max-w-7xl mx-auto px-4 sm:px-8 py-8 sm:py-12 flex flex-col h-[calc(100vh-80px)] overflow-hidden">
+            <div className="mb-8 sm:mb-10 shrink-0">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-3 sm:mb-4">
+                    Participants
+                </div>
+                <h1 className="text-2xl sm:text-4xl font-black tracking-tighter leading-none mb-3 text-slate-900">Liste des Participants</h1>
+                <p className="max-w-2xl text-sm sm:text-base text-slate-500 font-medium leading-relaxed">Gérez la base de données des participants pour chaque événement.</p>
             </div>
 
             <div className="flex flex-1 gap-8 min-h-0 overflow-hidden">
                 {/* Events Column */}
-                <div className="w-80 border-r border-slate-200 pr-8 space-y-4 overflow-y-auto custom-scrollbar">
+                <div className={`${mobileOpen ? 'hidden sm:block' : ''} w-80 border-r border-slate-200 pr-8 space-y-4 overflow-y-auto custom-scrollbar`}>
                     <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest px-2 mb-4">Vos Événements</p>
                     {events.map((event) => (
                         <button 
                             key={event._id}
                             onClick={() => fetchAttendees(event._id)}
                             className={`w-full p-4 rounded-2xl flex items-center justify-between group transition-all text-left ${
-                                selectedEvent === event._id ? 'bg-red-600 shadow-xl shadow-red-500/20 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900'
+                                selectedEvent === event._id ? 'bg-slate-900 shadow-xl shadow-slate-900/15 text-white' : 'bg-slate-100 hover:bg-slate-200 text-slate-500 hover:text-slate-900'
                             }`}
                         >
                             <span className="font-bold text-sm truncate pr-4">{event.title}</span>
@@ -87,19 +101,31 @@ const AttendeeList = () => {
                 </div>
 
                 {/* Attendees Column */}
-                <div className="flex-1 min-w-0 flex flex-col overflow-hidden">
+                <div className={`flex-1 min-w-0 flex flex-col overflow-hidden ${mobileOpen ? '' : 'hidden sm:flex'}`}>
                     {selectedEvent ? (
                         <>
-                            <div className="mb-6 shrink-0 relative flex items-center">
-                                <Search className="absolute left-4 text-slate-500" size={18} />
-                                <input 
-                                    type="text" 
-                                    placeholder="Rechercher un participant..."
-                                    value={searchTerm}
-                                    onChange={(e) => setSearchTerm(e.target.value)}
-                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-red-500/30 font-medium"
-                                />
-                                <div className="ml-4 px-4 py-2 bg-red-500/10 rounded-xl border border-red-500/20 text-red-600 text-xs font-black">
+                            <div className="mb-5 sm:mb-6 shrink-0 relative flex flex-col gap-3 sm:flex-row sm:items-center">
+                                {isMobile && (
+                                    <button
+                                        onClick={() => setMobileOpen(false)}
+                                        className="inline-flex w-fit items-center gap-2 text-slate-700 bg-white border border-slate-200 rounded-xl px-3 py-2 shadow-sm"
+                                        aria-label="Retour aux événements"
+                                    >
+                                        <ChevronLeft size={16} />
+                                        <span className="text-sm font-bold">Retour</span>
+                                    </button>
+                                )}
+                                <div className="relative flex-1 min-w-0 w-full">
+                                    <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500" size={18} />
+                                    <input 
+                                        type="text" 
+                                        placeholder="Rechercher un participant..."
+                                        value={searchTerm}
+                                        onChange={(e) => setSearchTerm(e.target.value)}
+                                        className="w-full bg-slate-100 border border-slate-200 rounded-2xl py-3 pl-12 pr-4 outline-none focus:border-slate-300 font-medium"
+                                    />
+                                </div>
+                                <div className="self-start sm:self-auto px-4 py-2 bg-slate-100 rounded-xl border border-slate-200 text-slate-700 text-xs font-black whitespace-nowrap">
                                     {filteredAttendees.length} PARTICIPANTS
                                 </div>
                             </div>
@@ -107,7 +133,7 @@ const AttendeeList = () => {
                             <div className="flex-1 overflow-y-auto custom-scrollbar">
                                 {attendeesLoading ? (
                                     <div className="flex justify-center py-20">
-                                        <Loader2 className="animate-spin text-red-500" size={32} />
+                                        <Loader2 className="animate-spin text-slate-700" size={32} />
                                     </div>
                                 ) : filteredAttendees.length === 0 ? (
                                     <div className="text-center py-20 text-slate-500 font-bold uppercase tracking-widest text-[10px]">
@@ -115,37 +141,39 @@ const AttendeeList = () => {
                                     </div>
                                 ) : (
                                     <div className="grid grid-cols-1 gap-3">
-                                        {filteredAttendees.map((ticket) => (
-                                            <div key={ticket._id} className="bg-slate-100 border border-slate-200 rounded-3xl p-6 flex items-center justify-between hover:bg-slate-200 transition-all group">
-                                                <div className="flex items-center gap-4">
-                                                    <div className="w-12 h-12 bg-slate-100 rounded-2xl flex items-center justify-center border border-slate-200 group-hover:border-red-500/30 transition-colors">
-                                                        <UserCircle size={24} className="text-slate-500" />
-                                                    </div>
-                                                    <div>
-                                                        <h4 className="font-bold text-sm">{ticket.user?.name}</h4>
-                                                        <div className="flex items-center gap-3 text-[10px] text-slate-500 mt-1 uppercase tracking-wider font-bold">
-                                                            <div className="flex items-center gap-1 group-hover:text-red-600 transition-colors">
-                                                                <Mail size={12} /> {ticket.user?.email}
-                                                            </div>
-                                                            <div className="flex items-center gap-1">
-                                                                <Clock size={12} /> Acheté le {new Date(ticket.createdAt).toLocaleDateString()}
+                                            {filteredAttendees.map((ticket) => (
+                                                <div key={ticket._id} className="bg-white border border-slate-100 rounded-3xl p-4 flex items-center justify-between hover:shadow-md transition-all group">
+                                                    <div className="flex items-center gap-4 min-w-0">
+                                                        <div className="w-12 h-12 bg-slate-50 rounded-2xl flex items-center justify-center border border-slate-100 shrink-0">
+                                                            <UserCircle size={22} className="text-slate-500" />
+                                                        </div>
+                                                        <div className="min-w-0">
+                                                            <h4 className="font-bold text-sm truncate">{ticket.user?.name}</h4>
+                                                            <div className="mt-1 text-xs text-slate-500">
+                                                                <div className="flex items-center gap-2 truncate">
+                                                                    <Mail size={12} />
+                                                                    <span className="truncate">{ticket.user?.email}</span>
+                                                                </div>
+                                                                <div className="flex items-center gap-2 mt-1 text-[11px] text-slate-400">
+                                                                    <Clock size={12} />
+                                                                    <span>Acheté le {new Date(ticket.createdAt).toLocaleDateString('fr-FR')}</span>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                    <div className="text-right ml-4 flex flex-col items-end">
+                                                        <span className={`px-3 py-1 rounded-full text-[11px] font-bold uppercase tracking-wider border ${
+                                                            ticket.status === 'checked_in' ? 'bg-emerald-50 text-emerald-700 border-emerald-200' : 
+                                                            ticket.status === 'active' ? 'bg-slate-50 text-slate-700 border-slate-100' :
+                                                            'bg-slate-50 text-slate-500 border-slate-100'
+                                                        }`}>
+                                                            {ticket.status === 'checked_in' ? 'Présent' : ticket.status === 'active' ? 'Actif' : 'Utilisé'}
+                                                        </span>
+                                                        <p className="text-xs font-medium text-slate-500 mt-2">Tier: {ticket.tier}</p>
+                                                    </div>
                                                 </div>
-                                                <div className="text-right">
-                                                    <span className={`px-2.5 py-1 rounded-lg text-[9px] font-black uppercase tracking-widest border ${
-                                                        ticket.status === 'checked_in' ? 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' : 
-                                                        ticket.status === 'active' ? 'bg-red-500/10 text-red-600 border-red-500/20' :
-                                                        'bg-slate-100 text-slate-500 border-slate-200'
-                                                    }`}>
-                                                        {ticket.status === 'checked_in' ? 'PRÉSENT' : ticket.status === 'active' ? 'ACTIF' : 'UTILISÉ'}
-                                                    </span>
-                                                    <p className="text-[10px] font-medium text-slate-500 mt-2">Tier: {ticket.tier}</p>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
+                                            ))}
+                                        </div>
                                 )}
                             </div>
                         </>
@@ -156,6 +184,7 @@ const AttendeeList = () => {
                         </div>
                     )}
                 </div>
+            </div>
             </div>
         </div>
     );

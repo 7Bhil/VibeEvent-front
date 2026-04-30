@@ -104,15 +104,19 @@ const PollManager = () => {
     };
 
     return (
-        <div className="p-10 max-w-7xl mx-auto pb-20">
-            <div className="flex justify-between items-end mb-12">
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-12 pb-20">
+            <div className="flex flex-col lg:flex-row lg:justify-between lg:items-end gap-6 mb-10">
                 <div>
-                    <h1 className="text-4xl font-black tracking-tighter mb-4">Gestion des Votes</h1>
+                    <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-4">
+                        Sondages
+                    </div>
+                    <h1 className="text-3xl sm:text-4xl font-black tracking-tighter mb-3 text-slate-900">Gestion des Votes</h1>
                     <p className="text-slate-500 font-medium">Créez des sondages exclusifs pour vos détenteurs de billets.</p>
                 </div>
                 <button 
                     onClick={() => setShowCreate(true)}
-                    className="bg-red-600 hover:bg-red-500 text-white font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2"
+                    className="bg-slate-900 hover:bg-slate-800 text-white font-black py-4 px-8 rounded-2xl text-xs uppercase tracking-[0.2em] transition-all flex items-center gap-2 shadow-lg shadow-slate-900/10"
                 >
                     <Plus size={18} strokeWidth={3} /> Nouveau Sondage
                 </button>
@@ -120,23 +124,23 @@ const PollManager = () => {
 
             {loading ? (
                 <div className="flex justify-center py-20">
-                    <Loader2 className="animate-spin text-red-500" size={40} />
+                    <Loader2 className="animate-spin text-slate-700" size={40} />
                 </div>
             ) : polls.length === 0 ? (
-                <div className="bg-slate-100 border border-slate-200 rounded-[40px] p-20 text-center">
+                <div className="bg-white border border-slate-200/70 rounded-[40px] p-16 sm:p-20 text-center shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                     <Vote className="mx-auto text-slate-700 mb-6" size={48} />
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-[10px] mb-6">Aucun sondage créé</p>
-                    <button onClick={() => setShowCreate(true)} className="text-red-500 font-black text-sm hover:underline">
+                    <button onClick={() => setShowCreate(true)} className="text-slate-900 font-black text-sm hover:underline">
                         Lancer votre premier vote →
                     </button>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
                     {polls.map((poll) => (
-                        <div key={poll._id} className="bg-slate-100 border border-slate-200 rounded-[40px] p-8 flex flex-col justify-between group hover:bg-slate-200 transition-all">
+                        <div key={poll._id} className="bg-white border border-slate-200/70 rounded-[40px] p-8 flex flex-col justify-between group hover:shadow-[0_14px_40px_-24px_rgba(15,23,42,0.2)] transition-all">
                             <div>
                                 <div className="flex justify-between items-start mb-6">
-                                    <div className="bg-red-500/10 text-red-600 p-3 rounded-xl border border-red-500/20">
+                                    <div className="bg-slate-100 text-slate-700 p-3 rounded-xl border border-slate-200">
                                         <PieChart size={20} />
                                     </div>
                                     <div className="flex gap-2">
@@ -161,9 +165,9 @@ const PollManager = () => {
                                 </div>
                             </div>
 
-                            <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
+                                <div className="pt-6 border-t border-slate-200 flex items-center justify-between">
                                 <div className="flex items-center gap-2 text-[10px] font-bold text-slate-500 uppercase tracking-widest">
-                                    <Calendar size={14} className="text-red-500" />
+                                    <Calendar size={14} className="text-slate-700" />
                                     {poll.event?.title}
                                 </div>
                                 <div className="flex gap-2">
@@ -177,7 +181,7 @@ const PollManager = () => {
                                     {poll.status === 'active' && (
                                         <button 
                                             onClick={() => handleClosePoll(poll._id)}
-                                            className="px-4 py-2 bg-red-500/10 text-red-500 font-black text-[9px] uppercase tracking-widest rounded-xl hover:bg-red-500/20 transition-all"
+                                            className="px-4 py-2 bg-amber-500/10 text-amber-600 font-black text-[9px] uppercase tracking-widest rounded-xl hover:bg-amber-500/20 transition-all"
                                         >
                                             Clôturer
                                         </button>
@@ -203,7 +207,7 @@ const PollManager = () => {
                             <div>
                                 <label className="block text-[10px] font-black text-slate-500 uppercase tracking-widest mb-2">Choisir l'événement</label>
                                 <select 
-                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-red-500/30 font-medium appearance-none"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-slate-300 font-medium appearance-none"
                                     required
                                     value={newPoll.eventId}
                                     onChange={(e) => setNewPoll({...newPoll, eventId: e.target.value})}
@@ -221,7 +225,7 @@ const PollManager = () => {
                                     type="text" 
                                     required
                                     placeholder="Ex: Quel artiste préférez-vous ?"
-                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-red-500/30"
+                                    className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-slate-300"
                                     value={newPoll.question}
                                     onChange={(e) => setNewPoll({...newPoll, question: e.target.value})}
                                 />
@@ -236,7 +240,7 @@ const PollManager = () => {
                                                 type="text" 
                                                 required={i < 2}
                                                 placeholder={`Option ${i+1}`}
-                                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-red-500/30 pr-12"
+                                                className="w-full bg-slate-100 border border-slate-200 rounded-2xl p-4 outline-none focus:border-slate-300 pr-12"
                                                 value={opt}
                                                 onChange={(e) => {
                                                     const updated = [...newPoll.options];
@@ -259,7 +263,7 @@ const PollManager = () => {
                                         <button 
                                             type="button"
                                             onClick={() => setNewPoll({...newPoll, options: [...newPoll.options, '']})}
-                                            className="text-xs font-black text-red-500 uppercase tracking-widest hover:underline"
+                                            className="text-xs font-black text-slate-700 uppercase tracking-widest hover:underline"
                                         >
                                             + Ajouter une option
                                         </button>
@@ -267,13 +271,14 @@ const PollManager = () => {
                                 </div>
                             </div>
 
-                            <button className="w-full bg-red-600 hover:bg-red-500 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-[0.2em] shadow-xl shadow-red-500/20 transition-all">
+                            <button className="w-full bg-slate-900 hover:bg-slate-800 text-white font-black py-4 rounded-2xl text-xs uppercase tracking-[0.2em] shadow-xl shadow-slate-900/20 transition-all">
                                 Publier le Sondage
                             </button>
                         </form>
                     </div>
                 </div>
             )}
+            </div>
         </div>
     );
 };

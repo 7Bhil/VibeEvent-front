@@ -82,13 +82,15 @@ const Voting = () => {
     }
 
     return (
-        <div className="p-10 max-w-5xl mx-auto pb-20">
-            <div className="mb-16 text-center">
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 rounded-full border border-red-500/20 text-red-600 text-[10px] font-black uppercase tracking-widest mb-6">
+        <div className="px-4 sm:px-6 lg:px-10 py-8 sm:py-10 max-w-5xl mx-auto pb-20">
+            <div className="mb-12 sm:mb-16 text-center">
+                <div className="inline-flex items-center gap-2 px-4 py-2 bg-red-500/10 rounded-full border border-red-500/20 text-red-600 text-[10px] font-black uppercase tracking-widest mb-5 sm:mb-6">
                     <Sparkles size={14} /> Engagements en direct
                 </div>
-                <h1 className="text-6xl font-black tracking-tighter mb-4">Vibez & Vote</h1>
-                <p className="text-slate-500 font-medium max-w-xl mx-auto">
+                <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black tracking-tighter leading-none whitespace-nowrap overflow-x-auto pb-2 mx-auto max-w-full">
+                    Vibez & Vote
+                </h1>
+                <p className="text-sm sm:text-base text-slate-500 font-medium max-w-xl mx-auto mt-3">
                     {polls.length > 0 
                         ? "Participez aux décisions des événements dont vous détenez un billet." 
                         : "Vous n'avez aucun sondage actif pour vos événements en cours."}
@@ -96,7 +98,7 @@ const Voting = () => {
             </div>
 
             {polls.length === 0 ? (
-                <div className="bg-slate-100 border border-slate-200 rounded-[48px] p-20 text-center opacity-50">
+                <div className="bg-white border border-slate-200 rounded-[36px] sm:rounded-[48px] p-10 sm:p-16 lg:p-20 text-center shadow-[0_10px_30px_-24px_rgba(15,23,42,0.2)]">
                     <AlertCircle className="mx-auto text-slate-700 mb-6" size={48} />
                     <p className="text-slate-500 font-bold uppercase tracking-widest text-xs">
                         Aucun sondage disponible. Achetez des billets pour débloquer les votes.
@@ -109,39 +111,39 @@ const Voting = () => {
                     </button>
                 </div>
             ) : (
-                <div className="space-y-12">
+                <div className="space-y-8 sm:space-y-12">
                     {polls.map((poll) => {
                         const total = getTotalVotes(poll.options);
                         const hasVoted = poll.voters.includes(currentUser.id || currentUser._id);
                         const isClosed = poll.status === 'closed' || (poll.expiresAt && new Date() > new Date(poll.expiresAt));
                         
                         return (
-                            <div key={poll._id} className="bg-slate-100 border border-slate-200 rounded-[48px] p-12 hover:bg-slate-200 transition-all duration-500 relative overflow-hidden group">
-                                <div className="absolute -right-20 -top-20 w-64 h-64 bg-red-500/5 blur-[100px] rounded-full group-hover:bg-red-500/10 transition-colors"></div>
+                            <div key={poll._id} className="bg-white border border-slate-200 rounded-[32px] sm:rounded-[48px] p-6 sm:p-8 lg:p-12 hover:shadow-[0_16px_44px_-28px_rgba(15,23,42,0.25)] transition-all duration-500 relative overflow-hidden group">
+                                <div className="absolute -right-20 -top-20 w-56 h-56 bg-red-500/5 blur-[100px] rounded-full group-hover:bg-red-500/10 transition-colors"></div>
                                 
                                 <div className="relative z-10">
-                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
+                                    <div className="flex flex-col md:flex-row md:items-center justify-between gap-5 sm:gap-6 mb-8 sm:mb-10">
                                         <div>
-                                            <div className="flex items-center gap-2 mb-2">
+                                            <div className="flex items-center gap-2 mb-2 flex-wrap">
                                                 <span className="bg-red-500/10 text-red-600 text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg border border-red-500/20">
                                                     #{poll._id.substring(poll._id.length-4)}
                                                 </span>
                                                 {isClosed && <span className="text-[9px] font-black uppercase tracking-widest px-2 py-1 rounded-lg bg-red-500/10 text-red-400 border border-red-500/10">Clos</span>}
                                             </div>
-                                            <h2 className="text-3xl font-black tracking-tighter mb-2">{poll.question}</h2>
-                                            <p className="text-slate-500 font-medium">{poll.description}</p>
+                                            <h2 className="text-2xl sm:text-3xl font-black tracking-tighter leading-tight mb-2">{poll.question}</h2>
+                                            <p className="text-sm sm:text-base text-slate-500 font-medium max-w-3xl">{poll.description}</p>
                                         </div>
                                         <div className="flex items-center gap-4 shrink-0">
                                             <div className="text-right">
                                                 <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Total Votes</p>
-                                                <p className="font-black text-xl">{total.toLocaleString()}</p>
+                                                <p className="font-black text-xl sm:text-2xl">{total.toLocaleString()}</p>
                                             </div>
                                             {(poll.expiresAt || isClosed) && (
                                                 <>
                                                     <div className="w-px h-10 bg-slate-200"></div>
                                                     <div className="text-right">
                                                         <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest mb-1">Statut</p>
-                                                        <p className={`font-black text-xl ${isClosed ? 'text-red-400' : 'text-red-600'}`}>
+                                                        <p className={`font-black text-xl sm:text-2xl ${isClosed ? 'text-red-400' : 'text-red-600'}`}>
                                                             {isClosed ? 'Terminé' : 'En cours'}
                                                         </p>
                                                     </div>
@@ -150,7 +152,7 @@ const Voting = () => {
                                         </div>
                                     </div>
 
-                                    <div className="space-y-4">
+                                    <div className="space-y-3 sm:space-y-4">
                                         {poll.options.map((opt) => {
                                             const percentage = total > 0 ? Math.round((opt.votes / total) * 100) : 0;
                                             const showResults = hasVoted || isClosed;
@@ -160,7 +162,7 @@ const Voting = () => {
                                                     key={opt._id}
                                                     disabled={showResults}
                                                     onClick={() => handleVote(poll._id, opt._id)}
-                                                    className={`w-full relative group/opt overflow-hidden rounded-[24px] border transition-all ${
+                                                    className={`w-full relative group/opt overflow-hidden rounded-[20px] sm:rounded-[24px] border transition-all ${
                                                         showResults ? "cursor-default" : "cursor-pointer hover:border-slate-300"
                                                     } ${hasVoted ? "border-red-500/30 bg-red-600/5" : "border-slate-200 bg-slate-100"} `}
                                                 >
@@ -172,14 +174,14 @@ const Voting = () => {
                                                         ></div>
                                                     )}
 
-                                                    <div className="relative z-10 p-6 flex items-center justify-between">
-                                                        <div className="flex items-center gap-4">
+                                                    <div className="relative z-10 p-4 sm:p-6 flex items-center justify-between gap-4">
+                                                        <div className="flex items-center gap-3 sm:gap-4 min-w-0">
                                                             <div className={`w-3 h-3 rounded-full ${showResults ? 'bg-red-500' : 'bg-slate-500'} shadow-lg shadow-current/20`}></div>
-                                                            <span className="font-bold tracking-tight text-lg">{opt.text}</span>
+                                                            <span className="font-bold tracking-tight text-base sm:text-lg truncate">{opt.text}</span>
                                                         </div>
                                                         {showResults && (
                                                             <div className="text-right">
-                                                                <span className="font-black text-xl tracking-tighter">{percentage}%</span>
+                                                                <span className="font-black text-lg sm:text-xl tracking-tighter">{percentage}%</span>
                                                                 <p className="text-[10px] font-bold text-slate-500 uppercase tracking-widest">{opt.votes} voix</p>
                                                             </div>
                                                         )}
@@ -190,7 +192,7 @@ const Voting = () => {
                                     </div>
 
                                     {!hasVoted && !isClosed && (
-                                        <div className="mt-8 flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest">
+                                        <div className="mt-6 sm:mt-8 flex items-center justify-center gap-2 text-[10px] font-black text-slate-500 uppercase tracking-widest text-center">
                                             <Vote size={14} className="animate-bounce" /> Cliquez sur une option pour valider votre choix
                                         </div>
                                     )}

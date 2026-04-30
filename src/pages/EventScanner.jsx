@@ -60,10 +60,14 @@ const EventScanner = () => {
     };
 
     return (
-        <div className="p-10 max-w-4xl mx-auto">
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+            <div className="max-w-4xl mx-auto px-6 sm:px-8 py-10 sm:py-12">
             <div className="mb-10 text-center">
-                <Scan className="mx-auto text-red-500 mb-4" size={48} />
-                <h1 className="text-4xl font-black tracking-tighter">Scanner Sécurisé</h1>
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-4">
+                    Scanner
+                </div>
+                <Scan className="mx-auto text-slate-700 mb-4" size={48} />
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tighter text-slate-900">Scanner Sécurisé</h1>
                 <p className="text-slate-500 mt-2">Déchiffrement dynamique des accès.</p>
             </div>
 
@@ -73,7 +77,7 @@ const EventScanner = () => {
                     onClick={() => setScanMode('in')}
                     className={cn(
                         "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                        scanMode === 'in' ? "bg-red-600 text-white shadow-lg" : "text-slate-500 hover:text-slate-900"
+                        scanMode === 'in' ? "bg-slate-900 text-white shadow-lg" : "text-slate-500 hover:text-slate-900"
                     )}
                 >
                     <LogIn size={16} /> Entrée
@@ -82,7 +86,7 @@ const EventScanner = () => {
                     onClick={() => setScanMode('out')}
                     className={cn(
                         "flex-1 flex items-center justify-center gap-2 py-3 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                        scanMode === 'out' ? "bg-orange-600 text-slate-900 shadow-lg" : "text-slate-500 hover:text-slate-900"
+                        scanMode === 'out' ? "bg-slate-700 text-white shadow-lg" : "text-slate-500 hover:text-slate-900"
                     )}
                 >
                     <LogOut size={16} /> Sortie (Pass-out)
@@ -90,7 +94,7 @@ const EventScanner = () => {
             </div>
 
             {/* Scanner Area */}
-            <div className="bg-white border-2 border-slate-200 p-4 rounded-[40px] shadow-2xl relative overflow-hidden flex flex-col items-center">
+            <div className="bg-white border border-slate-200/70 p-4 rounded-[40px] shadow-[0_14px_40px_-24px_rgba(15,23,42,0.2)] relative overflow-hidden flex flex-col items-center">
                 {/* Result Overlay */}
                 {scanResult && (
                     <div className={cn(
@@ -105,7 +109,7 @@ const EventScanner = () => {
 
                 {scanning && !scanResult && (
                     <div className="absolute inset-0 z-10 bg-black/80 flex items-center justify-center">
-                        <Loader2 className="text-red-500 animate-spin" size={60} />
+                        <Loader2 className="text-slate-700 animate-spin" size={60} />
                     </div>
                 )}
 
@@ -120,7 +124,7 @@ const EventScanner = () => {
             <style>{`
                 /* Cacher les boutons par défaut moches de html5-qrcode */
                 #reader__dashboard_section_csr button {
-                    background-color: #2563eb !important;
+                    background-color: #0f172a !important;
                     color: white !important;
                     border: none !important;
                     padding: 8px 16px !important;
@@ -130,7 +134,7 @@ const EventScanner = () => {
                 }
                 #reader__dashboard_section_csr select {
                     background-color: #ffffff !important;
-                    color: white !important;
+                    color: #0f172a !important;
                     padding: 8px !important;
                     border-radius: 8px !important;
                     border: 1px solid #334155 !important;
@@ -140,6 +144,7 @@ const EventScanner = () => {
                     border-radius: 24px;
                 }
             `}</style>
+            </div>
         </div>
     );
 };

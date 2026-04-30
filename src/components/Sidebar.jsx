@@ -64,7 +64,7 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
 
     return (
         <aside className={cn(
-            "w-72 h-screen bg-slate-50 border-r border-slate-200 flex flex-col fixed left-0 top-0 z-[60] overflow-y-auto custom-scrollbar transition-transform duration-300 lg:translate-x-0",
+            "w-72 h-screen bg-gradient-to-b from-white via-slate-50 to-slate-50 border-r border-slate-200/60 flex flex-col fixed left-0 top-0 z-[60] overflow-y-hidden custom-scrollbar transition-transform duration-300 lg:translate-x-0",
             isOpen ? "translate-x-0" : "-translate-x-full"
         )}>
             {/* Mobile close overlay */}
@@ -75,29 +75,28 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
                 )}
                 onClick={() => setIsOpen(false)}
             />
-            <div className="p-8 pb-4">
-                <div className="flex items-center gap-3 mb-10 cursor-pointer" onClick={() => navigate('/explore')}>
-                    <div className="w-8 h-8 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>
-                    <h2 className="text-slate-900 font-black text-xl tracking-tighter uppercase italic">Evenflow</h2>
-
+            <div className="p-5 pb-3 flex-shrink-0">
+                <div className="flex items-center gap-2.5 mb-5 cursor-pointer" onClick={() => navigate('/explore')}>
+                    <div className="w-7 h-7 rounded-lg bg-gradient-to-tr from-red-600 to-red-500 shadow-lg shadow-red-500/20"></div>
+                    <h2 className="text-slate-900 font-black text-base tracking-tighter uppercase italic">Evenflow</h2>
                 </div>
 
-                <div className="mb-8">
-                    <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4 px-2">Participant</p>
-                    <nav className="space-y-1">
+                <div className="mb-5">
+                    <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Participant</p>
+                    <nav className="space-y-0.5">
                         {publicMenuItems.map((item) => (
                             <Link
                                 key={item.label}
                                 to={item.path}
                                 className={cn(
-                                    "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
+                                    "w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 group",
                                     location.pathname.startsWith(item.path)
-                                        ? "bg-slate-100 text-red-600" 
-                                        : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                                        ? "bg-gradient-to-r from-red-500/10 to-red-400/5 text-red-600 border border-red-200/40" 
+                                        : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50"
                                 )}
                             >
-                                <item.icon size={18} strokeWidth={location.pathname.startsWith(item.path) ? 2.5 : 2} />
-                                <span className="text-sm font-bold tracking-tight">{item.label}</span>
+                                <item.icon size={16} strokeWidth={location.pathname.startsWith(item.path) ? 2.5 : 2} />
+                                <span className="text-xs font-bold tracking-tight">{item.label}</span>
                             </Link>
                         ))}
                     </nav>
@@ -105,36 +104,36 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
                 
                 {(user.role === 'organizer' || user.role === 'admin') && (
                     <>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent mb-5"></div>
 
-                        <div className="mb-8">
-                            <div className="flex items-center justify-between px-2 mb-4">
-                                <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest">Organisateur</p>
+                        <div className="mb-5">
+                            <div className="flex items-center justify-between px-2 mb-3">
+                                <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest">Organisateur</p>
                             </div>
                             
                             <button 
                                 onClick={handleCreateClick}
-                                className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:to-red-600 text-slate-900 font-black py-3 rounded-xl flex items-center justify-center gap-2 shadow-2xl shadow-red-500/20 transition-all active:scale-95 mb-6 text-[10px] uppercase tracking-[0.2em]"
+                                className="w-full bg-gradient-to-r from-red-600 to-red-500 hover:from-red-700 hover:to-red-600 text-white font-black py-2.5 rounded-lg flex items-center justify-center gap-2 shadow-lg shadow-red-500/30 transition-all active:scale-95 mb-4 text-[9px] uppercase tracking-[0.15em]"
                             >
-                                <Plus size={16} strokeWidth={3} />
+                                <Plus size={15} strokeWidth={3} />
                                 Créer
                             </button>
 
 
-                            <nav className="space-y-1">
+                            <nav className="space-y-0.5">
                                 {filteredOrganizerItems.map((item) => (
                                     <Link
                                         key={item.label}
                                         to={item.path}
                                         className={cn(
-                                            "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
+                                            "w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 group",
                                             location.pathname === item.path 
-                                                ? "bg-slate-100 text-red-600" 
-                                                : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                                                ? "bg-gradient-to-r from-red-500/10 to-red-400/5 text-red-600 border border-red-200/40" 
+                                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50"
                                         )}
                                     >
-                                        <item.icon size={18} strokeWidth={location.pathname === item.path ? 2.5 : 2} />
-                                        <span className="text-sm font-bold tracking-tight">{item.label}</span>
+                                        <item.icon size={16} strokeWidth={location.pathname === item.path ? 2.5 : 2} />
+                                        <span className="text-xs font-bold tracking-tight">{item.label}</span>
                                     </Link>
                                 ))}
                             </nav>
@@ -144,24 +143,24 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
 
                 {user.role === 'admin' && (
                     <>
-                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200 to-transparent mb-8"></div>
+                        <div className="w-full h-px bg-gradient-to-r from-transparent via-slate-200/40 to-transparent mb-5"></div>
 
                         <div>
-                            <p className="text-[10px] font-black text-slate-600 uppercase tracking-widest mb-4 px-2">Plateforme</p>
-                            <nav className="space-y-1">
+                            <p className="text-[9px] font-black text-slate-500 uppercase tracking-widest mb-3 px-2">Plateforme</p>
+                            <nav className="space-y-0.5">
                                 {adminMenuItems.map((item) => (
                                     <Link
                                         key={item.label}
                                         to={item.path}
                                         className={cn(
-                                            "w-full flex items-center gap-4 px-4 py-3 rounded-2xl transition-all duration-300 group",
+                                            "w-full flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 group",
                                             location.pathname === item.path 
-                                                ? "bg-slate-100 text-emerald-400" 
-                                                : "text-slate-500 hover:text-slate-900 hover:bg-slate-100"
+                                                ? "bg-gradient-to-r from-emerald-500/10 to-emerald-400/5 text-emerald-600 border border-emerald-200/40" 
+                                                : "text-slate-600 hover:text-slate-900 hover:bg-slate-100/50"
                                         )}
                                     >
-                                        <item.icon size={18} strokeWidth={location.pathname === item.path ? 2.5 : 2} />
-                                        <span className="text-sm font-bold tracking-tight">{item.label}</span>
+                                        <item.icon size={16} strokeWidth={location.pathname === item.path ? 2.5 : 2} />
+                                        <span className="text-xs font-bold tracking-tight">{item.label}</span>
                                     </Link>
                                 ))}
                             </nav>
@@ -171,13 +170,13 @@ const Sidebar = ({ user, isOpen, setIsOpen }) => {
 
             </div>
 
-            <div className="mt-auto p-8 pt-4">
+            <div className="mt-auto p-5 pt-3 border-t border-slate-200/40 bg-gradient-to-b from-transparent to-slate-100/30">
                 <button 
                     onClick={handleLogout}
-                    className="w-full flex items-center gap-4 px-4 py-3 rounded-2xl text-slate-500 hover:text-red-400 hover:bg-red-500/10 transition-colors group"
+                    className="w-full flex items-center gap-3 px-3 py-2 rounded-xl text-slate-600 hover:text-red-500 hover:bg-red-500/5 transition-colors group"
                 >
-                    <LogOut size={18} />
-                    <span className="text-sm font-bold tracking-tight">Déconnexion</span>
+                    <LogOut size={16} />
+                    <span className="text-xs font-bold tracking-tight">Déconnexion</span>
                 </button>
             </div>
         </aside>

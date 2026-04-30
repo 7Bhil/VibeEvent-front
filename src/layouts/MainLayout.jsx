@@ -54,11 +54,11 @@ const MainLayout = () => {
 
 
     return (
-        <div className="min-h-screen bg-slate-50 text-slate-900 font-['Inter'] selection:bg-red-500/30 flex">
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60 text-slate-900 font-['Inter'] selection:bg-slate-400/20 flex">
             <Sidebar user={user} isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
             
             <div className="lg:pl-72 flex-1 flex flex-col w-full max-w-full overflow-x-hidden">
-                <header className="h-20 border-b border-slate-200/60 flex items-center justify-between px-6 lg:px-12 fixed left-0 lg:left-72 right-0 top-0 bg-white/70 backdrop-blur-2xl z-[40]">
+                <header className="h-20 border-b border-slate-200/60 flex items-center justify-between px-6 lg:px-12 fixed left-0 lg:left-72 right-0 top-0 bg-white/80 backdrop-blur-2xl z-[40] shadow-[0_8px_30px_-20px_rgba(15,23,42,0.25)]">
                     {/* Mobile Toggle */}
                     <button 
                         onClick={() => setIsSidebarOpen(!isSidebarOpen)}
@@ -68,11 +68,11 @@ const MainLayout = () => {
                     </button>
 
                     <div className="relative group w-full max-w-md hidden md:block">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-red-500 transition-all duration-300" size={16} />
+                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-slate-700 transition-all duration-300" size={16} />
                         <input 
                             type="text" 
                             placeholder="Rechercher des événements, artistes..."
-                            className="w-full bg-slate-100/50 border border-transparent rounded-2xl py-2.5 pl-12 pr-4 outline-none focus:bg-white focus:border-red-500/20 focus:ring-4 focus:ring-red-500/5 transition-all text-[13px] font-medium text-slate-900"
+                            className="w-full bg-slate-100/50 border border-transparent rounded-2xl py-2.5 pl-12 pr-4 outline-none focus:bg-white focus:border-slate-300 focus:ring-4 focus:ring-slate-200/60 transition-all text-[13px] font-medium text-slate-900"
                         />
                     </div>
 
@@ -82,7 +82,7 @@ const MainLayout = () => {
                                 <div className="p-2.5 bg-slate-100/50 rounded-xl hover:bg-slate-200/50 transition-colors">
                                     <Bell className="text-slate-500 group-hover:text-slate-900 transition-colors" size={18} />
                                 </div>
-                                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-red-500 rounded-full border-2 border-white ring-2 ring-red-500/10"></div>
+                                <div className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full border-2 border-white ring-2 ring-emerald-500/10"></div>
                             </div>
                         </div>
 

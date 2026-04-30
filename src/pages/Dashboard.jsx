@@ -42,8 +42,8 @@ const Dashboard = () => {
 
     if (loading) {
         return (
-            <div className="w-full h-screen flex justify-center items-center">
-                <Loader2 className="animate-spin text-red-500" size={50} />
+            <div className="w-full h-screen flex justify-center items-center bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+                <Loader2 className="animate-spin text-slate-700" size={50} />
             </div>
         );
     }
@@ -53,10 +53,10 @@ const Dashboard = () => {
     }
 
     const statCards = [
-        { label: 'Total Événements', value: stats.totalEvents, change: 'Créés', icon: Calendar, color: 'text-red-600', bg: 'bg-red-500/10' },
-        { label: 'Revenus', value: `${stats.totalRevenue} €`, change: 'Générés', icon: DollarSign, color: 'text-emerald-400', bg: 'bg-emerald-500/10' },
-        { label: 'Billets Vendus', value: stats.ticketsSold, change: 'Ventes', icon: Users, color: 'text-red-600', bg: 'bg-red-500/10' },
-        { label: 'Participants Actifs', value: stats.scansIn, change: 'Scannés', icon: Zap, color: 'text-yellow-400', bg: 'bg-yellow-500/10' }
+        { label: 'Total Événements', value: stats.totalEvents, change: 'Créés', icon: Calendar, color: 'text-slate-700', bg: 'bg-slate-500/10' },
+        { label: 'Revenus', value: `${stats.totalRevenue} €`, change: 'Générés', icon: DollarSign, color: 'text-emerald-600', bg: 'bg-emerald-500/10' },
+        { label: 'Billets Vendus', value: stats.ticketsSold, change: 'Ventes', icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-500/10' },
+        { label: 'Participants Actifs', value: stats.scansIn, change: 'Scannés', icon: Zap, color: 'text-amber-600', bg: 'bg-amber-500/10' }
     ];
 
     const CustomTooltip = ({ active, payload, label }) => {
@@ -73,35 +73,39 @@ const Dashboard = () => {
     };
 
     return (
-        <div className="p-10 max-w-7xl mx-auto">
+        <div className="min-h-screen bg-gradient-to-br from-white via-slate-50 to-slate-100/60">
+            <div className="max-w-7xl mx-auto px-6 sm:px-8 py-10 sm:py-12">
             {/* Welcome Section */}
-            <div className="mb-12">
-                <h1 className="text-4xl font-black tracking-tight mb-2">Centre de commandement</h1>
-                <p className="text-slate-500 font-medium">Bon retour. Vos événements génèrent de la hype aujourd'hui.</p>
+            <div className="mb-10">
+                <div className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-slate-50 px-3 py-1 text-[10px] font-black uppercase tracking-[0.18em] text-slate-500 mb-4">
+                    Tableau de bord
+                </div>
+                <h1 className="text-3xl sm:text-4xl font-black tracking-tight mb-2 text-slate-900">Centre de commandement</h1>
+                <p className="text-slate-500 font-medium">Bon retour. Vos événements avancent avec une vue claire et premium.</p>
             </div>
 
             {/* Stats Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-4 gap-6 mb-10">
+            <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-10">
                 {statCards.map((stat, i) => (
-                    <div key={i} className="bg-slate-100 border border-slate-200 rounded-[32px] p-8 hover:border-slate-200 transition-all group relative overflow-hidden">
+                    <div key={i} className="bg-white border border-slate-200/70 rounded-[28px] p-6 hover:shadow-[0_14px_40px_-20px_rgba(15,23,42,0.15)] transition-all group relative overflow-hidden">
                         <div className="absolute -right-4 -top-4 w-32 h-32 bg-white/2 opacity-[0.02] rounded-full group-hover:scale-125 transition-transform duration-500"></div>
                         <div className="flex justify-between items-start mb-6">
-                            <div className={`${stat.bg} ${stat.color} p-4 rounded-2xl`}>
-                                <stat.icon size={24} strokeWidth={2.5} />
+                            <div className={`${stat.bg} ${stat.color} p-3.5 rounded-2xl`}>
+                                <stat.icon size={22} strokeWidth={2.5} />
                             </div>
-                            <span className="bg-emerald-500/10 text-emerald-400 text-[10px] font-black uppercase tracking-widest py-1 px-3 rounded-full">{stat.change}</span>
+                            <span className="bg-slate-100 text-slate-500 text-[10px] font-black uppercase tracking-widest py-1 px-3 rounded-full">{stat.change}</span>
                         </div>
                         <div>
                             <p className="text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">{stat.label}</p>
-                            <h3 className="text-4xl font-black tracking-tighter">{stat.value}</h3>
+                            <h3 className="text-3xl font-black tracking-tighter text-slate-900">{stat.value}</h3>
                         </div>
                     </div>
                 ))}
             </div>
 
             {/* Charts Area */}
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-                <div className="lg:col-span-2 bg-slate-100 border border-slate-200 rounded-[32px] p-8">
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                <div className="lg:col-span-2 bg-white border border-slate-200/70 rounded-[32px] p-8 shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                     <div className="flex justify-between items-center mb-10">
                         <div>
                             <h3 className="text-xl font-bold tracking-tight">Ventes par Événement</h3>
@@ -129,9 +133,9 @@ const Dashboard = () => {
                 </div>
 
                 {/* Quick Access List */}
-                <div className="bg-white border border-slate-200 rounded-[32px] p-8 flex flex-col justify-between">
+                <div className="bg-white border border-slate-200/70 rounded-[32px] p-8 flex flex-col justify-between shadow-[0_10px_30px_-20px_rgba(15,23,42,0.15)]">
                     <div>
-                        <div className="w-12 h-12 bg-red-500/10 text-red-600 rounded-2xl flex items-center justify-center mb-6">
+                        <div className="w-12 h-12 bg-slate-100 text-slate-700 rounded-2xl flex items-center justify-center mb-6">
                             <QrCode size={24} strokeWidth={2.5} />
                         </div>
                         <h3 className="text-xl font-bold tracking-tight mb-2">Terminal de Check-in</h3>
@@ -139,18 +143,19 @@ const Dashboard = () => {
                     </div>
                     <button 
                         onClick={() => navigate('/dashboard/scanner')}
-                        className="w-full mt-8 bg-red-600/20 text-red-600 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/30 hover:bg-red-600/30 transition-all font-bold group"
+                        className="w-full mt-8 bg-slate-900 text-white py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-900 hover:bg-slate-800 transition-all font-bold group"
                     >
                         Lancer le Scanner
                     </button>
                     
                     <button 
                         onClick={() => navigate('/dashboard/events/create')}
-                        className="w-full mt-4 bg-red-600/20 text-red-600 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-red-500/30 hover:bg-red-600/30 transition-all font-bold"
+                        className="w-full mt-4 bg-slate-100 text-slate-800 py-4 rounded-xl text-[10px] font-black uppercase tracking-widest border border-slate-200 hover:bg-slate-200 transition-all font-bold"
                     >
                         Créer un Nouvel Événement
                     </button>
                 </div>
+            </div>
             </div>
         </div>
     );
