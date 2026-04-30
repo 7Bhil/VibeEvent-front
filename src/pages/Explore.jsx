@@ -63,11 +63,11 @@ const Explore = () => {
     };
 
     // Helper to extract min price
-    const getMinPrice = (tickets) => {
+    const getMinPrice = (tickets, currency = 'EUR') => {
         if (!tickets || tickets.length === 0) return 'Gratuit';
         const prices = tickets.map(t => t.price);
         const min = Math.min(...prices);
-        return min === 0 ? 'Gratuit' : `${min}€`; // TODO: Handle event.currency dynamically
+        return min === 0 ? 'Gratuit' : `${min} ${currency}`;
     };
 
     const handleHype = async (e, eventId) => {
@@ -201,7 +201,7 @@ const Explore = () => {
                                                 {new Date(event.date).toLocaleDateString()}
                                             </span>
                                             <span className="rounded-full border border-red-400/20 bg-red-500/90 px-3 py-1.5 text-[10px] font-black uppercase tracking-[0.18em] text-white shadow-lg shadow-red-500/25">
-                                                {getMinPrice(event.tickets)}
+                                                {getMinPrice(event.tickets, event.currency)}
                                             </span>
                                         </div>
 
