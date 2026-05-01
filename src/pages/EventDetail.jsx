@@ -112,6 +112,11 @@ const EventDetail = () => {
 
     useEffect(() => {
         const fetchEvent = async () => {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                navigate('/auth');
+                return;
+            }
             try {
                 const response = await fetch(`http://localhost:5000/api/events/${id}`);
                 const data = await response.json();

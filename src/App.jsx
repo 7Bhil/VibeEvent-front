@@ -53,7 +53,7 @@ function App() {
           <Route path="/dashboard/settings" element={<Profile />} />
         </Route>
   
-        <Route path="/" element={<Navigate to="/auth" replace />} />
+        <Route path="/" element={<Navigate to="/explore" replace />} />
       </Routes>
     </ToastProvider>
   );
