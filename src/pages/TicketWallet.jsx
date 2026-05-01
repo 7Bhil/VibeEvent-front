@@ -104,7 +104,15 @@ const TicketWallet = () => {
                                     {ticket.event?.image && <img src={ticket.event.image} alt="Event" className="w-full h-full object-cover opacity-80" />}
                                 </div>
                                 <div className="flex-1 flex flex-col justify-center">
-                                    <h3 className="text-lg sm:text-xl font-bold leading-tight">{ticket.event?.title || 'Événement inconnu'}</h3>
+                                    <div className="flex items-center gap-2 flex-wrap">
+                                        <h3 className="text-lg sm:text-xl font-bold leading-tight">{ticket.event?.title || 'Événement inconnu'}</h3>
+                                        <span className={cn(
+                                            "rounded-full border px-2.5 py-1 text-[9px] font-black uppercase tracking-[0.18em]",
+                                            ticket.pricePaid === 0 ? "border-emerald-200 bg-emerald-500/10 text-emerald-600" : "border-red-200 bg-red-500/10 text-red-600"
+                                        )}>
+                                            {ticket.pricePaid === 0 ? 'Gratuit' : 'Payant'}
+                                        </span>
+                                    </div>
                                     <div className="text-slate-500 text-sm mt-1 flex items-center gap-4 flex-wrap">
                                         <span className="flex items-center gap-1"><Clock size={14}/> {new Date(ticket.event?.date).toLocaleDateString()}</span>
                                     </div>

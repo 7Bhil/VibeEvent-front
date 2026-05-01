@@ -16,6 +16,8 @@ import Analytics from './pages/Analytics';
 import AttendeeList from './pages/AttendeeList';
 import PollManager from './pages/PollManager';
 import Upgrade from './pages/Upgrade';
+import PaymentSuccess from './pages/PaymentSuccess';
+import PaymentFailure from './pages/PaymentFailure';
 import './App.css';
 import { ToastProvider } from './components/Toast';
 
@@ -33,6 +35,8 @@ function App() {
           <Route path="/event/:id" element={<EventDetail />} />
           <Route path="/tickets" element={<TicketWallet />} />
           <Route path="/upgrade" element={<Upgrade />} />
+          <Route path="/payment/success" element={<PaymentSuccess />} />
+          <Route path="/payment/failed" element={<PaymentFailure />} />
   
           {/* Organizer content */}
           <Route path="/dashboard" element={<Dashboard />} />

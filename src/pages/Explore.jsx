@@ -67,7 +67,8 @@ const Explore = () => {
         if (!tickets || tickets.length === 0) return 'Gratuit';
         const prices = tickets.map(t => t.price);
         const min = Math.min(...prices);
-        return min === 0 ? 'Gratuit' : `${min} ${currency}`;
+        const allFree = prices.every(price => Number(price) === 0);
+        return allFree ? 'Gratuit' : `À partir de ${min} ${currency}`;
     };
 
     const handleHype = async (e, eventId) => {
