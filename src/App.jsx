@@ -18,6 +18,7 @@ import PollManager from './pages/PollManager';
 import Upgrade from './pages/Upgrade';
 import PaymentSuccess from './pages/PaymentSuccess';
 import PaymentFailure from './pages/PaymentFailure';
+import LandingPage from './pages/LandingPage';
 import './App.css';
 import { ToastProvider } from './components/Toast';
 
@@ -25,6 +26,7 @@ function App() {
   return (
     <ToastProvider>
       <Routes>
+        <Route path="/" element={<LandingPage />} />
         <Route path="/auth" element={<Auth />} />
         
         {/* Unified Layout */}
@@ -52,8 +54,6 @@ function App() {
           <Route path="/dashboard/voting" element={<PollManager />} />
           <Route path="/dashboard/settings" element={<Profile />} />
         </Route>
-  
-        <Route path="/" element={<Navigate to="/explore" replace />} />
       </Routes>
     </ToastProvider>
   );
