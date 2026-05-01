@@ -28,6 +28,24 @@ const EventsManagement = () => {
         fetchMyEvents();
     }, []);
 
+    const getEventStartAt = (event) => event?.startAt || event?.date;
+    const getEventEndAt = (event) => event?.endAt || event?.date;
+
+    const formatEventDateRange = (event) => {
+        const start = getEventStartAt(event);
+        const end = getEventEndAt(event);
+        if (!start) return '';
+
+        const startDate = new Date(start);
+        const endDate = end ? new Date(end) : null;
+
+        if (endDate && startDate.toDateString() !== endDate.toDateString()) {
+            return `${startDate.toLocaleDateString()} → ${endDate.toLocaleDateString()}`;
+        }
+
+        return startDate.toLocaleDateString();
+    };
+
     const handleDelete = async (eventId) => {
         if (!window.confirm('Êtes-vous sûr de vouloir supprimer cet événement ?')) return;
 
@@ -91,7 +109,7 @@ const EventsManagement = () => {
                                 <div className="flex flex-wrap items-center justify-center md:justify-start gap-4 text-slate-500 text-xs">
                                     <div className="flex items-center gap-1.5">
                                         <Calendar size={14} className="text-slate-700" />
-                                        <span>{new Date(event.date).toLocaleDateString()}</span>
+                                            <span>{formatEventDateRange(event)}</span>
                                     </div>
                                     <div className="flex items-center gap-1.5">
                                         <MapPin size={14} className="text-slate-700" />

@@ -42,7 +42,15 @@ const EventDetail = () => {
     const [loading, setLoading] = useState(true);
     const [purchasing, setPurchasing] = useState(false);
     const [ticketQuantities, setTicketQuantities] = useState({});
+    const [heroImageSrc, setHeroImageSrc] = useState(null);
+    const [heroImageTooSmall, setHeroImageTooSmall] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem('user') || '{}');
+
+    // Minimum dimensions for the hero image (avoid low-res uploads)
+    const MIN_HERO_IMAGE_WIDTH = 1200;
+    const MIN_HERO_IMAGE_HEIGHT = 600;
+    const FALLBACK_HERO_IMAGE =
+        'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80';
 
     const handleGoBack = () => {
         if (event && event.createdBy) {
@@ -67,6 +75,41 @@ const EventDetail = () => {
         }
     };
 
+    const getEventStartAt = (ev) => ev?.startAt || ev?.date;
+    const getEventEndAt = (ev) => ev?.endAt || ev?.date;
+
+    const formatDateRange = (ev) => {
+        const start = getEventStartAt(ev);
+        const end = getEventEndAt(ev);
+        if (!start) return '';
+
+        const startDate = new Date(start);
+        const endDate = end ? new Date(end) : null;
+
+        // Multi-day event: show date range
+        if (endDate && startDate.toDateString() !== endDate.toDateString()) {
+            return `${startDate.toLocaleDateString([], { day: '2-digit', month: 'long', year: 'numeric' })} → ${endDate.toLocaleDateString([], { day: '2-digit', month: 'long', year: 'numeric' })}`;
+        }
+
+        return startDate.toLocaleDateString([], { day: '2-digit', month: 'long', year: 'numeric' });
+    };
+
+    const formatTimeRange = (ev) => {
+        const start = getEventStartAt(ev);
+        const end = getEventEndAt(ev);
+        if (!start) return '';
+
+        const startDate = new Date(start);
+        const endDate = end ? new Date(end) : null;
+
+        // Same-day: show hours range, otherwise show start time only
+        if (endDate && startDate.toDateString() === endDate.toDateString()) {
+            return `${startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} - ${endDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        }
+
+        return startDate.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    };
+
     useEffect(() => {
         const fetchEvent = async () => {
             try {
@@ -74,6 +117,8 @@ const EventDetail = () => {
                 const data = await response.json();
                 if (response.ok) {
                     setEvent(data);
+                    setHeroImageSrc(data.image || FALLBACK_HERO_IMAGE);
+                    setHeroImageTooSmall(false);
                     if (Array.isArray(data.tickets)) {
                         const initialQuantities = data.tickets.reduce((acc, ticket) => {
                             acc[ticket.tier] = 0;
@@ -199,11 +244,27 @@ const EventDetail = () => {
                 {/* Hero */}
                 <section className="grid gap-3 lg:grid-cols-[1.35fr_0.85fr] lg:gap-4">
                     <div className="relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-[0_30px_100px_-50px_rgba(15,23,42,0.35)] sm:rounded-3xl">
-                        <div className="relative min-h-[28vh] sm:min-h-[36vh] lg:min-h-[48vh]">
+                        <div className="relative min-h-[320px] sm:min-h-[420px] lg:min-h-[520px]">
                             <img 
-                                src={event.image || 'https://images.unsplash.com/photo-1470229722913-7c0e2dbbafd3?auto=format&fit=crop&w=1600&q=80'}
-                                className="h-full w-full object-cover opacity-75 transition-transform duration-1000 hover:scale-105"
+                                src={heroImageSrc || FALLBACK_HERO_IMAGE}
+                                className="h-full w-full object-cover opacity-75 transition-transform duration-1000 hover:scale-105 min-h-[320px]"
                                 alt="Event background"
+                                onLoad={(e) => {
+                                    const img = e.currentTarget;
+                                    const tooSmall =
+                                        (img.naturalWidth && img.naturalHeight)
+                                            ? img.naturalWidth < MIN_HERO_IMAGE_WIDTH || img.naturalHeight < MIN_HERO_IMAGE_HEIGHT
+                                            : false;
+
+                                    if (tooSmall) {
+                                        setHeroImageTooSmall(true);
+                                        setHeroImageSrc(FALLBACK_HERO_IMAGE);
+                                    }
+                                }}
+                                onError={() => {
+                                    setHeroImageTooSmall(true);
+                                    setHeroImageSrc(FALLBACK_HERO_IMAGE);
+                                }}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-white via-white/20 to-transparent" />
                             <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(239,68,68,0.10),transparent_30%),linear-gradient(90deg,rgba(255,255,255,0.12),transparent_45%)]" />
@@ -222,6 +283,14 @@ const EventDetail = () => {
                                     <span className="hidden sm:inline text-[10px]">Partager</span>
                                 </button>
                             </div>
+
+                            {heroImageTooSmall && (
+                                <div className="absolute left-3 bottom-3 sm:left-4 sm:bottom-4">
+                                    <div className="rounded-full border border-amber-200/70 bg-amber-50/90 px-3 py-1 text-[9px] font-black uppercase tracking-[0.18em] text-amber-700 shadow-sm backdrop-blur-md">
+                                        Image trop petite (min {MIN_HERO_IMAGE_WIDTH}×{MIN_HERO_IMAGE_HEIGHT})
+                                    </div>
+                                </div>
+                            )}
 
                             <div className="absolute inset-x-0 bottom-0 p-2 sm:p-3 lg:p-4">
                                 <div className="max-w-3xl">
@@ -247,7 +316,10 @@ const EventDetail = () => {
                                             <div className="min-w-0">
                                                 <p className="text-[8px] font-black uppercase tracking-[0.16em] text-slate-400 sm:text-[9px] sm:tracking-[0.18em]">Date & Heure</p>
                                                 <p className="truncate text-[11px] font-bold leading-tight text-slate-900 sm:text-xs">
-                                                    {new Date(event.date).toLocaleDateString([], { day: '2-digit', month: 'long', year: 'numeric' })} - {new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                                    {formatDateRange(event)}
+                                                </p>
+                                                <p className="truncate text-[11px] font-bold leading-tight text-slate-600 sm:text-[11px]">
+                                                    {formatTimeRange(event)}
                                                 </p>
                                             </div>
                                         </div>
@@ -434,11 +506,11 @@ const EventDetail = () => {
                         <div className="mt-3 space-y-1.5">
                             <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
                                 <span className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">Date</span>
-                                <span className="text-xs font-bold text-slate-900 text-right">{new Date(event.date).toLocaleDateString([], { weekday: 'short', day: '2-digit', month: 'long' })}</span>
+                                <span className="text-xs font-bold text-slate-900 text-right">{formatDateRange(event)}</span>
                             </div>
                             <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
                                 <span className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">Horaire</span>
-                                <span className="text-xs font-bold text-slate-900 text-right">{new Date(event.date).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</span>
+                                <span className="text-xs font-bold text-slate-900 text-right">{formatTimeRange(event)}</span>
                             </div>
                             <div className="flex items-center justify-between gap-2 rounded-lg border border-slate-200 bg-slate-50 px-3 py-2">
                                 <span className="text-[9px] font-black uppercase tracking-[0.16em] text-slate-400">Lieu</span>
