@@ -123,13 +123,13 @@ const Auth = () => {
             {/* Right Side - Form Container */}
             <div className="flex-1 flex items-center justify-center px-4 py-4 lg:px-8 xl:px-10 relative bg-linear-to-b from-white via-white to-red-50/25">
                 <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(circle_at_50%_40%,rgba(239,68,68,0.07),transparent_45%)]"></div>
-                <div className="w-full max-w-85 xl:max-w-95 relative z-10">
+                <div className="w-full max-w-[420px] xl:max-w-[480px] relative z-10">
                     <div className="overflow-hidden rounded-[30px] border border-black/5 bg-white/95 backdrop-blur-xl shadow-[0_24px_80px_rgba(15,23,42,0.10)]">
                         <div className="h-1 w-full bg-linear-to-r from-red-700 via-red-500 to-red-700"></div>
                         <div className="p-4 lg:p-5 xl:p-6">
                             <div className="mb-3 flex items-start justify-between gap-3">
                                 <div>
-                                    <p className="text-[9px] font-black uppercase tracking-[0.28em] text-red-600 mb-1">Accès sécurisé</p>
+                                    <p className="text-[11px] font-black uppercase tracking-[0.28em] text-red-600 mb-1.5">Accès sécurisé</p>
                                     <h2 className="text-black text-[22px] xl:text-3xl font-black leading-[1.02] tracking-tight">
                                         {isLogin ? 'Ravi de vous revoir' : 'Créer un compte'}
                                     </h2>
@@ -138,7 +138,7 @@ const Auth = () => {
                                     </p>
                                 </div>
                                 <div className="hidden sm:flex h-10 w-10 items-center justify-center rounded-2xl border border-red-100 bg-red-50 text-red-600 shadow-sm">
-                                    <ShieldCheck size={18} strokeWidth={2.25} />
+                                    <ShieldCheck size={20} strokeWidth={2.25} />
                                 </div>
                             </div>
 
@@ -148,7 +148,7 @@ const Auth = () => {
                                     type="button"
                                     onClick={() => setIsLogin(true)}
                                     className={cn(
-                                        "flex-1 rounded-xl px-3 py-2 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300",
+                                        "flex-1 rounded-xl px-3 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] transition-all duration-300",
                                         isLogin ? "bg-red-600 text-white shadow-[0_10px_25px_rgba(239,68,68,0.22)]" : "bg-transparent text-slate-600 hover:text-black"
                                     )}
                                 >
@@ -158,7 +158,7 @@ const Auth = () => {
                                     type="button"
                                     onClick={() => setIsLogin(false)}
                                     className={cn(
-                                        "flex-1 rounded-xl px-3 py-2 text-[9px] font-black uppercase tracking-[0.12em] transition-all duration-300",
+                                        "flex-1 rounded-xl px-3 py-2.5 text-[11px] font-black uppercase tracking-[0.12em] transition-all duration-300",
                                         !isLogin ? "bg-red-600 text-white shadow-[0_10px_25px_rgba(239,68,68,0.22)]" : "bg-transparent text-slate-600 hover:text-black"
                                     )}
                                 >
@@ -175,7 +175,7 @@ const Auth = () => {
 
                         {!isLogin && (
                             <div className="space-y-1.5">
-                                <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Nom complet</label>
+                                <label className="text-[11px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Nom complet</label>
                                 <div className="relative group">
                                     <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
                                         <User size={16} strokeWidth={2.5} />
@@ -187,7 +187,7 @@ const Auth = () => {
                                         value={formData.name}
                                         onChange={handleChange}
                                         placeholder=" votre nom"
-                                        className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
+                                        className="w-full bg-slate-50 border border-slate-200 rounded-[18px] py-3 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[15px] font-medium"
                                     />
                                 </div>
                             </div>
@@ -195,10 +195,10 @@ const Auth = () => {
 
 
                         <div className="space-y-1.5">
-                            <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Adresse Email</label>
+                            <label className="text-[11px] font-black text-slate-700 uppercase tracking-[0.14em] ml-1">Adresse Email</label>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
-                                    <Mail size={16} strokeWidth={2.5} />
+                                    <Mail size={18} strokeWidth={2.5} />
                                 </div>
                                 <input 
                                     name="email"
@@ -207,19 +207,19 @@ const Auth = () => {
                                     value={formData.email}
                                     onChange={handleChange}
                                     placeholder=" votre@email.com"
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-[18px] py-3 pl-10 pr-4 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[15px] font-medium"
                                 />
                             </div>
                         </div>
 
                         <div className="space-y-1.5">
                                 <div className="flex justify-between items-center ml-1 gap-2">
-                                <label className="text-[8px] font-black text-slate-700 uppercase tracking-[0.14em]">Mot de passe</label>
-                                {isLogin && <a href="#" className="text-[8px] font-black text-slate-500 uppercase tracking-widest hover:text-red-700 transition-colors">Oublié ?</a>}
+                                <label className="text-[11px] font-black text-slate-700 uppercase tracking-[0.14em]">Mot de passe</label>
+                                {isLogin && <a href="#" className="text-[10px] font-black text-slate-500 uppercase tracking-widest hover:text-red-700 transition-colors">Oublié ?</a>}
                             </div>
                             <div className="relative group">
                                 <div className="absolute left-4 top-1/2 -translate-y-1/2 text-slate-500 group-focus-within:text-red-600 transition-colors pointer-events-none">
-                                    <Lock size={16} strokeWidth={2.5} />
+                                    <Lock size={18} strokeWidth={2.5} />
                                 </div>
                                 <input 
                                     name="password"
@@ -228,14 +228,14 @@ const Auth = () => {
                                     value={formData.password}
                                     onChange={handleChange}
                                     placeholder=" ••••••••••••"
-                                    className="w-full bg-slate-50 border border-slate-200 rounded-2xl py-2 pl-9 pr-9 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[13px] font-medium"
+                                    className="w-full bg-slate-50 border border-slate-200 rounded-[18px] py-3 pl-10 pr-10 text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-red-400 focus:ring-4 focus:ring-red-500/10 transition-all outline-none text-[15px] font-medium"
                                 />
                                 <button 
                                     type="button"
                                     onClick={() => setShowPassword(!showPassword)}
                                     className="absolute right-4 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-700 transition-colors"
                                 >
-                                    {showPassword ? <EyeOff size={16} strokeWidth={2} /> : <Eye size={16} strokeWidth={2} />}
+                                    {showPassword ? <EyeOff size={18} strokeWidth={2} /> : <Eye size={18} strokeWidth={2} />}
                                 </button>
                             </div>
                         </div>
@@ -244,7 +244,7 @@ const Auth = () => {
                             type="submit"
                             disabled={loading}
                             className={cn(
-                                "w-full bg-red-600 text-white font-black py-2 rounded-2xl uppercase tracking-[0.14em] text-[9px] shadow-[0_14px_35px_rgba(239,68,68,0.20)] hover:bg-red-700 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 disabled:grayscale mt-2.5",
+                                "w-full bg-red-600 text-white font-black py-4 rounded-2xl uppercase tracking-[0.14em] text-[11px] shadow-[0_14px_35px_rgba(239,68,68,0.20)] hover:bg-red-700 hover:scale-[1.01] active:scale-[0.98] transition-all disabled:opacity-50 disabled:scale-100 disabled:grayscale mt-4",
                                 loading && "cursor-not-allowed"
                             )}
                         >
@@ -253,7 +253,7 @@ const Auth = () => {
 
                         <div className="relative flex items-center py-1.5">
                             <div className="grow border-t border-slate-200"></div>
-                            <span className="shrink mx-4 text-[8px] font-black text-slate-500 uppercase tracking-[0.25em]">Ou continuer avec</span>
+                            <span className="shrink mx-4 text-[10px] font-black text-slate-500 uppercase tracking-[0.25em]">Ou continuer avec</span>
                             <div className="grow border-t border-slate-200"></div>
                         </div>
 
@@ -262,20 +262,21 @@ const Auth = () => {
                                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-red-500 shadow-sm ring-1 ring-red-100">
                                     <Globe size={12} className="group-hover:text-red-700 transition-colors" />
                                 </span>
-                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Google</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Google</span>
                             </button>
                             <button type="button" className="flex items-center justify-center gap-1.5 bg-slate-50 text-slate-900 py-1.5 rounded-2xl border border-slate-200 hover:border-red-200 hover:bg-white hover:shadow-md transition-all group">
                                 <span className="flex h-5 w-5 items-center justify-center rounded-full bg-white text-red-500 shadow-sm ring-1 ring-red-100">
                                     <AppleIcon size={12} className="group-hover:text-red-700 transition-colors" />
                                 </span>
-                                <span className="text-[8px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Apple ID</span>
+                                <span className="text-[10px] font-black uppercase tracking-widest text-slate-700 group-hover:text-red-700">Apple ID</span>
                             </button>
                         </div>
 
-                        <div className="flex justify-center mt-2">
-                            <div className="inline-flex flex-col items-center gap-0.5 text-[8px] font-black text-red-500 uppercase tracking-[0.18em] px-2.5 py-0.5 -mt-1">
-                                <a href="#" className="hover:text-red-700 transition-colors">Politique de Confidentialité</a>
-                                <a href="#" className="hover:text-red-700 transition-colors">Conditions d'Utilisation</a>
+                        <div className="flex justify-center mt-6">
+                            <div className="inline-flex items-center gap-6 text-[10px] font-black text-slate-400 uppercase tracking-[0.12em]">
+                                <a href="#" className="hover:text-red-600 transition-colors">Confidentialité</a>
+                                <span className="w-1 h-1 rounded-full bg-slate-200"></span>
+                                <a href="#" className="hover:text-red-600 transition-colors">Conditions</a>
                             </div>
                         </div>
                             </form>
